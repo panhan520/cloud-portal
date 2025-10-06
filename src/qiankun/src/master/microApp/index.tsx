@@ -1,11 +1,8 @@
-import { defineComponent } from 'vue'
-import styles from './index.module.scss'
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'MicroApp',
+  name: "MicroApp",
   setup() {
-    return () => (
-      <div id='microApp' class={styles.container} />
-    )
-  }
-})
+    return () => <div id="microApp"></div>;
+  },
+});
