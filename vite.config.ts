@@ -38,6 +38,10 @@ export default defineConfig(async ({ mode }) => {
           // 如果子应用 mock 路径不需要 /mock 前缀，可以用 rewrite
           // rewrite: (path) => path.replace(/^\/mock/, '')
         },
+        "/apis": {
+          target: "http://172.31.36.140:11001",
+          changeOrigin: true,
+        },
       },
     },
   };
