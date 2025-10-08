@@ -2,8 +2,22 @@
   <header class="vce-header">
     <div class="vce-header-left">
       <!-- 左侧菜单图标 -->
-      <div class="menu-icon" @click="toggleDrawer" role="button">
-        <svg v-if="!drawerVisible" viewBox="0 0 24 24" width="24" height="24">
+      <div
+        class="menu-icon"
+        role="button"
+        @mouseenter="openDrawer"
+        @click="toggleDrawer"
+        :class="{
+          isActive: drawerVisible,
+        }"
+      >
+        <svg
+          v-if="!drawerVisible"
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          style="pointer-events: none"
+        >
           <path
             d="M3 6h18M3 12h18M3 18h18"
             stroke="currentColor"
@@ -11,7 +25,13 @@
             stroke-linecap="round"
           />
         </svg>
-        <svg v-else viewBox="0 0 24 24" width="24" height="24">
+        <svg
+          v-else
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          style="pointer-events: none"
+        >
           <path
             d="M6 6l12 12M6 18L18 6"
             stroke="currentColor"
@@ -23,19 +43,7 @@
 
       <!-- 原 Logo -->
       <div class="vce-logo" @click="goTo('/')" role="button">
-        <svg
-          class="logo-icon"
-          viewBox="0 0 48 48"
-          width="28"
-          height="28"
-          aria-hidden="true"
-        >
-          <path
-            d="M24 4L44 34H4L24 4z"
-            fill="currentColor"
-            style="color: #ff6a00"
-          />
-        </svg>
+        <img :src="logo" alt="" class="logo-img" />
         <span class="logo-text">GAINETICS</span>
       </div>
     </div>
@@ -60,12 +68,7 @@
       <el-dropdown trigger="click" @command="handleDropdownCommand">
         <template #default>
           <div class="user-wrap">
-            <img
-              class="avatar"
-              src="https://dummyimage.com/32x32/ccc/fff.png"
-              alt="avatar"
-            />
-            <span class="user-name">{{ userName }}</span>
+            <div class="avatar">H</div>
             <i class="arrow"></i>
           </div>
         </template>
@@ -86,7 +89,9 @@
       custom-class="left-drawer"
     >
       <div class="drawer-content">
-        <div class="drawer-title">产品与服务</div>
+        <div class="drawer-title">
+          <el-icon :size="18"><Grid /></el-icon>产品与服务
+        </div>
         <ul class="drawer-list">
           <li @click="goTo('/waf')">Web应用防火墙</li>
           <li @click="goTo('/cert')">证书中心</li>
@@ -99,30 +104,36 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { Search } from "@element-plus/icons-vue";
+import { Search, Grid } from "@element-plus/icons-vue";
+import logo from "@/assets/svgs/logo.svg";
 
 type DropdownCommand = string | number | Record<string, any>;
 
 const router = useRouter();
-const userName = ref("H");
 const searchText = ref("");
 const drawerVisible = ref(false);
-
 const toggleDrawer = () => {
+  console.log("toggleDrawer", drawerVisible.value);
   drawerVisible.value = !drawerVisible.value;
+};
+const openDrawer = () => {
+  drawerVisible.value = true;
 };
 
 const handleDropdownCommand = (cmd: DropdownCommand) => {
   if (cmd === "profile") {
-    router.push("/profile");
+    // router.push("/profile");
   } else if (cmd === "logout") {
     console.log("logout");
   }
 };
 
 const goTo = (path: string) => {
-  if (drawerVisible.value && path !== "/") toggleDrawer();
   router.push(path);
+  // 点击菜单项时关闭抽屉
+  if (drawerVisible.value && path !== "/") {
+    drawerVisible.value = false;
+  }
 };
 
 const onSearch = () => {
@@ -146,10 +157,12 @@ const onSearch = () => {
   align-items: center;
   justify-content: space-between;
   height: 48px;
-  padding: 0 20px;
+  padding: 0 20px 0 0;
   background: #ffffff;
   box-sizing: border-box;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  position: relative;
 
   .vce-header-left {
     display: flex;
@@ -157,10 +170,27 @@ const onSearch = () => {
     gap: 16px;
 
     .menu-icon {
+      width: 48px;
+      height: 48px;
       cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &:hover {
+        background: #1664ff;
+        svg {
+          color: #ffffff;
+        }
+      }
       svg {
         color: #333;
         transition: transform 0.3s;
+      }
+    }
+    .isActive {
+      background: #1664ff;
+      svg {
+        color: #ffffff;
       }
     }
 
@@ -169,9 +199,8 @@ const onSearch = () => {
       align-items: center;
       gap: 10px;
       cursor: pointer;
-
-      .logo-icon {
-        display: inline-block;
+      .logo-img {
+        width: 30px;
       }
       .logo-text {
         font-weight: 600;
@@ -211,10 +240,13 @@ const onSearch = () => {
         width: 32px;
         height: 32px;
         border-radius: 50%;
-      }
-      .user-name {
-        font-size: 14px;
-        color: #111827;
+        background-color: #ecf2ff;
+        color: #05f;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        font-weight: 600;
       }
       .arrow {
         width: 8px;
@@ -240,7 +272,11 @@ const onSearch = () => {
     border: 1px solid #a0c0ff;
     border-radius: 4px;
     color: #1664ff;
-    padding: 10px 12px;
+    padding: 8px 12px;
+    i {
+      margin: -4px 5px 0 0;
+      vertical-align: middle;
+    }
   }
   .drawer-list {
     list-style: none;

@@ -1,9 +1,9 @@
 import { h } from "vue";
-import Layout from "~/layout/index.vue";
-import { MicroApp } from "~/constants/qiankun";
+import Layout from "@/layout/index.vue";
+import { MicroApp } from "@/constants/qiankun";
 
 import type { RouteRecordRaw } from "vue-router";
-import type { IRouteRecordRaw } from "~/qiankun/src/interfaces";
+import type { IRouteRecordRaw } from "@/qiankun/src/interfaces";
 
 export const notFoundRouter: RouteRecordRaw = {
   path: "/:pathMatch(.*)",
@@ -21,7 +21,7 @@ export const basicRoutes: IRouteRecordRaw[] = [
       {
         path: "home",
         name: "Home",
-        component: () => import("~/views/home/index.vue"),
+        component: () => import("@/views/home/index.vue"),
         meta: { title: "首页" },
       },
       {

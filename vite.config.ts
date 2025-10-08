@@ -20,7 +20,7 @@ export default defineConfig(async ({ mode }) => {
     ],
     resolve: {
       alias: {
-        "~": path.join(__dirname, ".", "src"),
+        "@": path.join(__dirname, ".", "src"),
       },
     },
     server: {

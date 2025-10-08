@@ -13,10 +13,10 @@
 </template>
 
 <script setup lang="ts">
-import { useMaster } from "~/qiankun/src/master";
+import { useMaster } from "@/qiankun/src/master";
 import Header from "./header/index.vue";
 import SideBar from "./sideBar";
-import { MicroApp } from "~/qiankun/src/master";
+import { MicroApp } from "@/qiankun/src/master";
 
 const { actions, globalState } = useMaster();
 
