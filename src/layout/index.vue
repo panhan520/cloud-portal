@@ -4,7 +4,9 @@
     <SideBar />
     <!-- 强制路由组件重新挂载，避免访问已卸载 vnode -->
     <RouterView v-slot="{ Component }">
-      <component :is="Component" :key="$route.fullPath" />
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
     </RouterView>
     <MicroApp />
   </div>
