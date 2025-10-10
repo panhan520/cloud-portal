@@ -1,5 +1,9 @@
 @import "element-plus/theme-chalk/dark/css-vars.css";
-
+:root {
+  --el-color-primary: #1664ff;
+  --el-color-primary-light-3: rgba(22, 100, 255, 0.7);
+  /* 可以继续定义其他相关颜色 */
+}
 // 解决抽屉弹出时，body宽度变化的问题
 .el-popup-parent--hidden {
   width: 100% !important;
@@ -66,7 +70,7 @@ body {
   border-radius: 4px 4px 0 0 !important;
   font-weight: 400 !important;
   color: #42464e !important;
-  padding: 0px 15px !important;
+  padding: 0px 15px 0 0 !important;
   height: 34px !important;
 }
 .el-tabs--card > .el-tabs__header {
@@ -112,6 +116,7 @@ body {
 }
 // 输入框
 .el-input__inner {
+  height: 40px;
   font-size: 13px !important;
 }
 // 下拉框

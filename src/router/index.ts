@@ -21,7 +21,7 @@ export const basicRoutes: IRouteRecordRaw[] = [
       {
         path: "home",
         name: "Home",
-        component: () => import("@/views/home/index.vue"),
+        component: () => import("@/views/HomePage/index.vue"),
         meta: { title: "首页" },
       },
       {
@@ -38,6 +38,16 @@ export const basicRoutes: IRouteRecordRaw[] = [
         microApp: MicroApp.WAF,
       },
     ],
+  },
+  {
+    path: "/login",
+    component: () => import("@/views/Login/index.vue"),
+    name: "Login",
+    meta: {
+      hidden: true,
+      title: "登录",
+      noTagsView: true,
+    },
   },
 
   notFoundRouter,

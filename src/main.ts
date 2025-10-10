@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { useMaster } from "./qiankun/src/master";
 import { getMicroAppConfigs } from "./constants/qiankun";
-import { basicRoutes } from "./routers";
+import { basicRoutes } from "./router";
 import App from "./App";
 // 引入全局样式
 import "@/styles/index.less";
