@@ -123,7 +123,7 @@
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-// import { loginApi } from "@/api/login";
+import { loginApi } from "@/api/login";
 import type { LoginParams } from "@/api/login/types";
 import logo from "@/assets/svgs/logo.svg";
 import sideLogo from "@/assets/login/side-logo.svg";
@@ -190,8 +190,8 @@ async function handleSubmit() {
         type: form.type,
       };
 
-      //   const res = await loginApi(payload);
-      //   //   假设 res.token 存在
+      const res = await loginApi(payload);
+      //   假设 res.token 存在
       //   if (res?.token) {
       //     sessionStorage.setItem("ACCESS_TOKEN", res.token);
 

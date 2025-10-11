@@ -6,5 +6,5 @@ const userAxios = getReqByProxyModule({ proxyModule: PROXY.USER });
 
 // 登录
 export const loginApi = (data: LoginParams) => {
-  return userAxios.post("/v1/login", data);
+  return userAxios.post("/api/v1/iam/login", data);
 };
