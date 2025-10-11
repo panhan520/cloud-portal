@@ -42,9 +42,10 @@ export default defineConfig(async ({ mode }) => {
           target: "http://172.31.36.140:11001",
           changeOrigin: true,
         },
-        "/cloud/user": {
+        "/user-proxy": {
           target: "http://172.31.40.103:8000",
           changeOrigin: true,
+          rewrite: (path:string) => path.replace(/^\/user-proxy/, ''),
         },
       },
     },
