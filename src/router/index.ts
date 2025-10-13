@@ -50,6 +50,16 @@ export const basicRoutes: IRouteRecordRaw[] = [
     },
   },
   {
+    path: "/register",
+    component: () => import("@/views/Register/index.vue"),
+    name: "Register",
+    meta: {
+      hidden: true,
+      title: "注册",
+      noTagsView: true,
+    },
+  },
+  {
     path: "/findUsername",
     component: () => import("@/views/FindUsername/index.vue"),
     name: "FindUsername",

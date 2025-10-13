@@ -65,8 +65,13 @@
     </div>
 
     <div class="vce-header-right">
-      <div @click="onLogin" class="cursor-pointer">登录</div>
-      <div class="register-button cursor-pointer">注册</div>
+      <div @click="goToPage('/login')" class="cursor-pointer">登录</div>
+      <div
+        @click="goToPage('/register')"
+        class="register-button cursor-pointer"
+      >
+        注册
+      </div>
       <el-dropdown trigger="click" @command="handleDropdownCommand">
         <template #default>
           <div class="user-wrap">
@@ -142,8 +147,8 @@ const onSearch = () => {
   router.push({ path: "/search", query: { q: searchText.value } });
 };
 
-const onLogin = () => {
-  router.push({ path: "/login" });
+const goToPage = (path: string) => {
+  router.push({ path });
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="login-wrap">
-    <div class="logo-top">
+    <div class="logo-top" @click="goTo('/')">
       <img :src="logo" alt="logo" />
       GAINETICS
     </div>
@@ -106,12 +106,12 @@
             >
           </el-form-item>
           <div class="login-bottom">
-            <div class="forgot" @click="onForgotAccont">忘记账号</div>
+            <div class="forgot" @click="goTo('/findUsername')">忘记账号</div>
             <div class="forgot" @click="onForgotPassword">忘记密码</div>
           </div>
 
           <div class="register">
-            没有账号？ <span @click="onRegister">现在就注册</span>
+            没有账号？ <span @click="goTo('/register')">现在就注册</span>
           </div>
         </el-form>
       </el-card>
@@ -145,8 +145,6 @@ const form = reactive({
 
 // 正则
 const emailRe = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-const passwordRe =
-  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~`]{8,}$/;
 
 // 校验规则
 const rules = {
@@ -165,18 +163,9 @@ const rules = {
   passwordEmail: [{ required: true, message: "请输入密码", trigger: "blur" }],
 };
 
-// 忘记账号
-function onForgotAccont() {
-  router.replace({ path: "/findUsername" });
-}
-
 // 忘记密码
 function onForgotPassword() {
   router.push({ path: "/login" });
-}
-
-function onRegister() {
-  ElMessage.info("跳转到注册（示例）");
 }
 
 // 登录处理
@@ -213,9 +202,12 @@ async function handleSubmit() {
     }
   });
 }
+function goTo(path: string) {
+  router.push({ path: path });
+}
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 :deep(.el-tabs__item) {
   background-color: #ffffff !important;
   font-size: 16px;
@@ -243,6 +235,7 @@ async function handleSubmit() {
   display: flex;
   align-items: center;
   font-weight: 600;
+  cursor: pointer;
   img {
     width: 50px;
     margin-right: 5px;
@@ -308,6 +301,7 @@ async function handleSubmit() {
   .register {
     text-align: center;
     color: #6b7280;
+    cursor: pointer;
     span {
       color: #3370ff;
     }

@@ -16,3 +16,15 @@ export interface LoginResponse {
     // 其他用户信息
   };
 }
+export interface getCodeParams {
+  channel?: string;
+  recipient: string;
+  type: string;
+}
+export interface registryParams {
+  username: string;
+  email: string;
+  password: string;
+  type?: string;
+  code?: string;
+}
