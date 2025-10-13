@@ -41,7 +41,7 @@
         </svg>
       </div>
 
-      <!-- 原 Logo -->
+      <!-- Logo -->
       <div class="vce-logo" @click="goTo('/')" role="button">
         <img :src="logo" alt="" class="logo-img" />
         <span class="logo-text">GAINETICS</span>
@@ -65,6 +65,8 @@
     </div>
 
     <div class="vce-header-right">
+      <div @click="onLogin" class="cursor-pointer">登录</div>
+      <div class="register-button cursor-pointer">注册</div>
       <el-dropdown trigger="click" @command="handleDropdownCommand">
         <template #default>
           <div class="user-wrap">
@@ -139,6 +141,10 @@ const goTo = (path: string) => {
 const onSearch = () => {
   router.push({ path: "/search", query: { q: searchText.value } });
 };
+
+const onLogin = () => {
+  router.push({ path: "/login" });
+};
 </script>
 
 <style lang="less" scoped>
@@ -163,6 +169,8 @@ const onSearch = () => {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   z-index: 100;
   position: relative;
+  color: #1d2129;
+  font-size: 14px;
 
   .vce-header-left {
     display: flex;
@@ -228,7 +236,20 @@ const onSearch = () => {
     display: flex;
     align-items: center;
     gap: 12px;
-
+    .register-button {
+      width: 129px;
+      background: #165dff;
+      border-radius: 0;
+      color: #fff !important;
+      display: block;
+      font-weight: 500;
+      line-height: 48px;
+      margin-left: 16px;
+      position: relative;
+      text-align: center;
+      -moz-transition: background 0.1s linear;
+      transition: 0.1s linear;
+    }
     .user-wrap {
       display: inline-flex;
       align-items: center;

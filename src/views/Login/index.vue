@@ -106,8 +106,8 @@
             >
           </el-form-item>
           <div class="login-bottom">
-            <div class="forgot" @click="onForgot">忘记账号</div>
-            <div class="forgot" @click="onForgot">忘记密码</div>
+            <div class="forgot" @click="onForgotAccont">忘记账号</div>
+            <div class="forgot" @click="onForgotPassword">忘记密码</div>
           </div>
 
           <div class="register">
@@ -123,7 +123,7 @@
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { loginApi } from "@/api/login";
+// import { loginApi } from "@/api/login";
 import type { LoginParams } from "@/api/login/types";
 import logo from "@/assets/svgs/logo.svg";
 import sideLogo from "@/assets/login/side-logo.svg";
@@ -165,9 +165,14 @@ const rules = {
   passwordEmail: [{ required: true, message: "请输入密码", trigger: "blur" }],
 };
 
-// 忘记 / 注册 操作
-function onForgot() {
-  ElMessage.info("跳转到忘记密码（示例）");
+// 忘记账号
+function onForgotAccont() {
+  router.replace({ path: "/findUsername" });
+}
+
+// 忘记密码
+function onForgotPassword() {
+  router.push({ path: "/login" });
 }
 
 function onRegister() {
@@ -190,13 +195,13 @@ async function handleSubmit() {
         type: form.type,
       };
 
-      const res = await loginApi(payload);
+      //   const res = await loginApi(payload);
       //   假设 res.token 存在
       //   if (res?.token) {
       //     sessionStorage.setItem("ACCESS_TOKEN", res.token);
 
       //     ElMessage.success("登录成功");
-      //     router.replace({ name: "Dashboard" });
+      //   router.replace({ name: "Dashboard" });
       //   } else {
       //     ElMessage.error("登录失败：后端未返回 token");
       //   }

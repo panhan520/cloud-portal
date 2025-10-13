@@ -49,6 +49,16 @@ export const basicRoutes: IRouteRecordRaw[] = [
       noTagsView: true,
     },
   },
+  {
+    path: "/findUsername",
+    component: () => import("@/views/FindUsername/index.vue"),
+    name: "FindUsername",
+    meta: {
+      hidden: true,
+      title: "忘记账号",
+      noTagsView: true,
+    },
+  },
 
   notFoundRouter,
 ];
