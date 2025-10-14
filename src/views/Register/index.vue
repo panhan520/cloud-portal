@@ -346,9 +346,9 @@ const handleSendCode = async () => {
   try {
     let payload: getCodeParams;
     payload = {
-      channel: "CODE_CHANNEL_TYPE_EMAIL_AWS_SES=10",
+      channel: "CODE_CHANNEL_TYPE_EMAIL_AWS_SES",
       recipient: form.email?.trim(),
-      type: "CODE_BUSINESS_TYPE_REGISTER=10",
+      type: "CODE_BUSINESS_TYPE_REGISTER",
     };
     await getCodeApi(payload);
     ElMessage.success("验证码已发送");
@@ -376,13 +376,13 @@ async function handleSubmit() {
         username: form.username?.trim(),
         email: form.email?.trim(),
         password: form.password,
-        type: "ACCOUNT_TYPE_EMAIL=2",
+        type: "ACCOUNT_TYPE_EMAIL",
         code: form.code?.trim(),
       };
 
       const res = await registryApi(payload);
-      console.log(res);
       ElMessage.success("注册成功");
+      goTo("/login");
     } catch (err: any) {
       console.error("注册失败", err);
     } finally {
