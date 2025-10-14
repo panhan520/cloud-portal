@@ -35,9 +35,9 @@
                 @keyup.enter.native="handleSubmit"
               />
             </el-form-item>
-            <el-form-item prop="password">
+            <el-form-item prop="passwordEmail">
               <el-input
-                v-model="form.password"
+                v-model="form.passwordEmail"
                 placeholder="请输入密码"
                 :type="showPassword ? 'text' : 'password'"
                 @keyup.enter.native="handleSubmit"
@@ -66,9 +66,9 @@
               />
             </el-form-item>
 
-            <el-form-item prop="passwordEmail">
+            <el-form-item prop="password">
               <el-input
-                v-model="form.passwordEmail"
+                v-model="form.password"
                 :type="showPassword ? 'text' : 'password'"
                 placeholder="请输入密码"
                 autocomplete="current-password"
@@ -123,6 +123,7 @@
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
+import "element-plus/theme-chalk/el-message.css";
 import { loginApi } from "@/api/login";
 import type { LoginParams, ApiResponse } from "@/api/login/types";
 import { useUserStore } from "@/store/modules/user";
@@ -181,16 +182,19 @@ async function handleSubmit() {
 
     try {
       let payload: LoginParams;
+      console.log("form", form.password);
       payload = {
         username: form.username?.trim(),
         email: form.email?.trim(),
         password: form.type === "account" ? form.password : form.passwordEmail,
-        type: form.type,
+        type:
+          form.type === "account"
+            ? "ACCOUNT_TYPE_USERNAME"
+            : "ACCOUNT_TYPE_EMAIL",
       };
 
-      const res: ApiResponse<{ token: string; uid: string }> = await loginApi(
-        payload
-      );
+      const res: Record<string, any> = await loginApi(payload);
+      console.log("res", res);
       if (res.code === 200) {
         const token = res.data.token;
         // 解析 jwt
@@ -202,20 +206,7 @@ async function handleSubmit() {
         router.push({
           path: "/",
         });
-        // const infoRes = await infoApi(UserStore.userOrg.userId);
-        // UserStore.setUserEmail(infoRes.data.email);
-      } else {
-        // ElMessage.error(res.data);
       }
-      //   假设 res.token 存在
-      //   if (res?.token) {
-      //     sessionStorage.setItem("ACCESS_TOKEN", res.token);
-
-      //     ElMessage.success("登录成功");
-      //   router.replace({ name: "Dashboard" });
-      //   } else {
-      //     ElMessage.error("登录失败：后端未返回 token");
-      //   }
     } catch (err: any) {
       // 这里可根据 err.response 做更细的处理
       console.error("登录失败", err);
