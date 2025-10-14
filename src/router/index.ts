@@ -60,6 +60,16 @@ export const basicRoutes: IRouteRecordRaw[] = [
     },
   },
   {
+    path: "/completeInfo",
+    component: () => import("@/views/CompleteInfo/index.vue"),
+    name: "CompleteInfo",
+    meta: {
+      hidden: true,
+      title: "完善信息",
+      noTagsView: true,
+    },
+  },
+  {
     path: "/findUsername",
     component: () => import("@/views/FindUsername/index.vue"),
     name: "FindUsername",
