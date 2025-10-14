@@ -16,6 +16,11 @@ export interface LoginResponse {
     // 其他用户信息
   };
 }
+export interface ApiResponse<T = any> {
+  code: number;
+  message: string;
+  data: T;
+}
 export interface getCodeParams {
   channel?: string;
   recipient: string;

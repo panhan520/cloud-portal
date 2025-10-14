@@ -124,12 +124,16 @@ import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { loginApi } from "@/api/login";
-import type { LoginParams } from "@/api/login/types";
+import type { LoginParams, ApiResponse } from "@/api/login/types";
+import { useUserStore } from "@/store/modules/user";
 import logo from "@/assets/svgs/logo.svg";
 import sideLogo from "@/assets/login/side-logo.svg";
 import { View, Hide } from "@element-plus/icons-vue";
+import { jwtDecode } from "jwt-decode";
+import type { JwtPayload } from "jwt-decode";
 
 const router = useRouter();
+const UserStore = useUserStore();
 const formRef = ref();
 const loading = ref(false);
 const showPassword = ref(false);
@@ -184,7 +188,25 @@ async function handleSubmit() {
         type: form.type,
       };
 
-        const res = await loginApi(payload);
+      const res: ApiResponse<{ token: string; uid: string }> = await loginApi(
+        payload
+      );
+      if (res.code === 200) {
+        const token = res.data.token;
+        // 解析 jwt
+        const decoded = jwtDecode<
+          JwtPayload & { tenantId: string; orgId: string; username: string }
+        >(token);
+        UserStore.setLoginInfo(token, res.data.uid, decoded);
+        ElMessage.success("登录成功");
+        router.push({
+          path: "/",
+        });
+        // const infoRes = await infoApi(UserStore.userOrg.userId);
+        // UserStore.setUserEmail(infoRes.data.email);
+      } else {
+        // ElMessage.error(res.data);
+      }
       //   假设 res.token 存在
       //   if (res?.token) {
       //     sessionStorage.setItem("ACCESS_TOKEN", res.token);

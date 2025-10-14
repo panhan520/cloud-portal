@@ -1,11 +1,18 @@
 import getReqByProxyModule from "@/config/request";
-import type { LoginParams, getCodeParams, registryParams } from "./types";
+import type {
+  LoginParams,
+  getCodeParams,
+  registryParams,
+  ApiResponse,
+} from "./types";
 
 import { PROXY } from "@/config/constants";
 const userAxios = getReqByProxyModule({ proxyModule: PROXY.USER });
 
 // 用户登录接口
-export const loginApi = (data: LoginParams) => {
+export const loginApi = (
+  data: LoginParams
+): Promise<ApiResponse<{ token: string; uid: string }>> => {
   return userAxios.post("/api/v1/iam/login", data);
 };
 
