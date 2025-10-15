@@ -107,7 +107,7 @@
           </el-form-item>
           <div class="login-bottom">
             <div class="forgot" @click="goTo('/findUsername')">忘记账号</div>
-            <div class="forgot" @click="onForgotPassword">忘记密码</div>
+            <div class="forgot" @click="goTo('/findPassword')">忘记密码</div>
           </div>
 
           <div class="register">
@@ -167,11 +167,6 @@ const rules = {
   password: [{ required: true, message: "请输入密码", trigger: "blur" }],
   passwordEmail: [{ required: true, message: "请输入密码", trigger: "blur" }],
 };
-
-// 忘记密码
-function onForgotPassword() {
-  router.push({ path: "/login" });
-}
 
 // 登录处理
 async function handleSubmit() {

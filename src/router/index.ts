@@ -79,6 +79,16 @@ export const basicRoutes: IRouteRecordRaw[] = [
       noTagsView: true,
     },
   },
+  {
+    path: "/findPassword",
+    component: () => import("@/views/FindPassword/index.vue"),
+    name: "FindPassword",
+    meta: {
+      hidden: true,
+      title: "忘记密码",
+      noTagsView: true,
+    },
+  },
 
   notFoundRouter,
 ];
