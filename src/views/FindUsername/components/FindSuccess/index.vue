@@ -19,27 +19,48 @@
         >完成</el-button
       >
     </div>
+    <!-- 重置密码弹框组件 -->
+    <ResetPassword
+      v-model="showResetDialog"
+      @confirm="handleResetConfirm"
+      @close="handleResetDialogClose"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import "element-plus/theme-chalk/el-message.css";
 import successIcon from "@/assets/login/success.svg";
+import ResetPassword from "../ResetPassword/index.vue";
 
 const router = useRouter();
 const props = defineProps<{
   username: string;
 }>();
 const username = props.username;
+
+// 控制重置密码弹框的显示
+const showResetDialog = ref(false);
+
 const handleCopy = async () => {
   await navigator.clipboard.writeText(username);
   ElMessage.success("复制成功");
 };
 
 const handleReset = () => {
-  //   router.push("/reset-password");
+  showResetDialog.value = true;
+};
+
+const handleResetConfirm = () => {
+  showResetDialog.value = false;
+  ElMessage.success("密码重置请求已提交");
+};
+
+const handleResetDialogClose = () => {
+  showResetDialog.value = false;
 };
 
 const handleDone = () => {

@@ -101,6 +101,7 @@ body {
   border-bottom: none !important;
   padding-right: 0 !important;
   padding-bottom: 0 !important;
+  text-align: left;
 }
 .el-dialog__footer {
   border-top: none !important;
@@ -186,4 +187,30 @@ body {
 
 .v-menu {
   height: 100vh !important;
+}
+// 密码校验的下拉框样式
+.password-check-list {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 20px;
+  color: #6b7280;
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+    .el-icon {
+      font-size: 15px;
+      margin-right: 6px;
+    }
+    span {
+      color: #333;
+    }
+    &.ok {
+      color: #16a34a;
+    }
+    &.fail {
+      color: #dc2626;
+    }
+  }
 }

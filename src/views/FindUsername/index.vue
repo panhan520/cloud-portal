@@ -88,7 +88,7 @@ const handleSendCode = async () => {
 
 const handleNext = async () => {
   username.value = "zxq123456";
-  currentStep.value = 3;
+  currentStep.value = 2;
   //   try {
   // await (formRef.value as any).validate();
   // const res = await findUsername(form.email, form.code);

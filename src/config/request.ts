@@ -64,7 +64,7 @@ const getReqByProxyModule = ({
 
   // response interceptor 接口响应拦截
   axiosInstance.interceptors.response.use(
-    (response: AxiosResponse) => {
+    (response: AxiosResponse): any => {
       const resData = response.data as {
         code?: number | string;
         message?: string;
@@ -86,12 +86,10 @@ const getReqByProxyModule = ({
       }
 
       if (resData.code && resData.code !== 200) {
-        ElMessage.error(resData.data || "请求失败");
-        return Promise.reject(new Error(resData.data || "请求失败"));
+        ElMessage.error(resData.message || "请求失败");
+        return Promise.reject(new Error(resData.message || "请求失败"));
       }
-
-      // ✅ 关键点：保持返回 AxiosResponse 结构
-      return { ...resData };
+      return resData;
     },
     async (error: AxiosError) => {
       const status = error.response?.status || 500;

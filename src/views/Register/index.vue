@@ -504,30 +504,3 @@ function goTo(path: string) {
   }
 }
 </style>
-<style lang="less">
-.password-check-list {
-  margin-top: 8px;
-  font-size: 12px;
-  line-height: 20px;
-  color: #6b7280;
-
-  .check-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 4px;
-    .el-icon {
-      font-size: 15px;
-      margin-right: 6px;
-    }
-    span {
-      color: #333;
-    }
-    &.ok {
-      color: #16a34a;
-    }
-    &.fail {
-      color: #dc2626;
-    }
-  }
-}
-</style>
