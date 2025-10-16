@@ -35,7 +35,9 @@ export const verifyCodeApi = (
 };
 
 // 忘记登录用户名 - 云平台
-export const forgetUsernameApi = (data: any): Promise<ApiResponse<{}>> => {
+export const forgetUsernameApi = (
+  data: any
+): Promise<ApiResponse<{ username: string }>> => {
   return userAxios.post("/api/v1/iam/username/forget", data);
 };
 

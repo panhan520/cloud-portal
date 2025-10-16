@@ -119,7 +119,7 @@ const handleNext = async () => {
     };
     const res = await forgetUsernameApi(payload);
     if (res.code === 200) {
-      username.value = "zxq123456";
+      username.value = res.data.username;
       currentStep.value = 2;
     } else {
       currentStep.value = 3;
