@@ -23,3 +23,9 @@ export interface registryParams {
   type?: string;
   code?: string;
 }
+
+export interface verifyCodeParams {
+  recipient: string;
+  code: string;
+  type: string;
+}

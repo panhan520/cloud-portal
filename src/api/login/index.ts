@@ -4,6 +4,7 @@ import type {
   getCodeParams,
   registryParams,
   ApiResponse,
+  verifyCodeParams,
 } from "./types";
 
 import { PROXY } from "@/config/constants";
@@ -17,11 +18,28 @@ export const loginApi = (
 };
 
 // 发送验证码邮件
-export const getCodeApi = (data: getCodeParams) => {
+export const getCodeApi = (data: getCodeParams): Promise<ApiResponse<{}>> => {
   return userAxios.post("/api/v1/iam/code", data);
 };
 
 // 用户注册接口
 export const registryApi = (data: registryParams) => {
   return userAxios.post("/api/v1/iam/registry", data);
+};
+
+// 校验邮箱验证码
+export const verifyCodeApi = (
+  data: verifyCodeParams
+): Promise<ApiResponse<{}>> => {
+  return userAxios.post("/api/v1/iam/verify_code", data);
+};
+
+// 忘记登录用户名 - 云平台
+export const forgetUsernameApi = (data: any): Promise<ApiResponse<{}>> => {
+  return userAxios.post("/api/v1/iam/username/forget", data);
+};
+
+// 忘记密码-云平台
+export const forgetPwdApi = (data: any): Promise<ApiResponse<{}>> => {
+  return userAxios.post("/api/v1/iam/pwd/forget", data);
 };

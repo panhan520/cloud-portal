@@ -17,13 +17,19 @@
 
           <el-form-item prop="code">
             <div class="code-box">
-              <el-input v-model="form.code" placeholder="请输入验证码" />
+              <el-input v-model="form.code" placeholder="请输入邮箱验证码" />
               <el-button
                 type="default"
                 :disabled="countdown > 0"
                 @click="handleSendCode"
               >
-                {{ countdown > 0 ? `${countdown}s` : "获取验证码" }}
+                {{
+                  countdown > 0
+                    ? `${countdown}s后重新获取`
+                    : hasGotCode
+                    ? "重新获取"
+                    : "获取验证码"
+                }}
               </el-button>
             </div>
           </el-form-item>
@@ -45,15 +51,18 @@
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
+import "element-plus/theme-chalk/el-message.css";
+import { getCodeApi, verifyCodeApi, forgetUsernameApi } from "@/api/login";
+import type { getCodeParams } from "@/api/login/types";
 import FindSuccess from "./components/FindSuccess/index.vue";
 import FindFail from "./components/FindFail/index.vue";
-// import { sendVerifyCode, findUsername } from "@/api/user";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const activeTab = ref("email");
 const countdown = ref(0);
 const timer = ref<number>();
+const hasGotCode = ref(false); // 用于记录是否获取过验证码
 const formRef = ref();
 
 const form = reactive({
@@ -74,21 +83,48 @@ const rules = {
 const handleSendCode = async () => {
   if (!form.email) return ElMessage.warning("请输入邮箱");
   try {
-    // await sendVerifyCode(form.email);
-    // ElMessage.success("验证码已发送");
-    // countdown.value = 60;
-    // timer.value = window.setInterval(() => {
-    //   countdown.value--;
-    //   if (countdown.value <= 0) clearInterval(timer.value);
-    // }, 1000);
+    let payload: getCodeParams;
+    payload = {
+      channel: "CODE_CHANNEL_TYPE_EMAIL_AWS_SES",
+      recipient: form.email?.trim(),
+      type: "CODE_BUSINESS_TYPE_FORGET_PWD",
+    };
+    const res = await getCodeApi(payload);
+    if (res.code === 200) {
+      ElMessage.success("验证码已发送");
+      hasGotCode.value = true; // 标记已获取过验证码
+      countdown.value = 60;
+      timer.value = window.setInterval(() => {
+        countdown.value--;
+        if (countdown.value <= 0) clearInterval(timer.value);
+      }, 1000);
+    }
   } catch (error) {
     ElMessage.error("发送失败，请稍后再试");
   }
 };
 
 const handleNext = async () => {
-  username.value = "zxq123456";
-  currentStep.value = 2;
+  let payload: any;
+  payload = {
+    recipient: form.email?.trim(),
+    code: form.code?.trim(),
+    type: "CODE_BUSINESS_TYPE_FORGET_PWD",
+  };
+  const res = await verifyCodeApi(payload);
+  if (res.code === 200) {
+    let payload: any;
+    payload = {
+      email: form.email?.trim(),
+    };
+    const res = await forgetUsernameApi(payload);
+    if (res.code === 200) {
+      username.value = "zxq123456";
+      currentStep.value = 2;
+    } else {
+      currentStep.value = 3;
+    }
+  }
   //   try {
   // await (formRef.value as any).validate();
   // const res = await findUsername(form.email, form.code);
