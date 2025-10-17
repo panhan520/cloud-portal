@@ -12,14 +12,11 @@
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from "vue-router";
 import failIcon from "@/assets/login/fail.svg";
 
-const router = useRouter();
-
+const emit = defineEmits(["update:currentStep"]);
 const handleDone = () => {
-  // 带修改
-  router.push("/login");
+  emit("update:currentStep", 1);
 };
 </script>
 

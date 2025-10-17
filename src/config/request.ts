@@ -85,7 +85,7 @@ const getReqByProxyModule = ({
         return Promise.reject(new Error(resData.message || "登录已过期"));
       }
 
-      if (resData.code && resData.code !== 200) {
+      if (resData.code && resData.code !== 200 && resData.code !== 10010001) {
         ElMessage.error(resData.message || "请求失败");
         return Promise.reject(new Error(resData.message || "请求失败"));
       }

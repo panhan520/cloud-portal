@@ -36,7 +36,9 @@
 
           <div class="btn-group">
             <el-button @click="handlePrev">上一步</el-button>
-            <el-button type="primary" @click="handleNext">下一步</el-button>
+            <el-button type="primary" @click="handleNext" :loading="loading"
+              >下一步</el-button
+            >
           </div>
         </el-form>
       </el-tab-pane>
@@ -44,7 +46,10 @@
     <!-- 找回成功 -->
     <FindSuccess v-if="currentStep === 2" :username="username" />
     <!-- 找回失败 -->
-    <FindFail v-if="currentStep === 3" />
+    <FindFail
+      v-if="currentStep === 3"
+      @update:currentStep="handleCurrentStep"
+    />
   </div>
 </template>
 
@@ -64,6 +69,7 @@ const countdown = ref(0);
 const timer = ref<number>();
 const hasGotCode = ref(false); // 用于记录是否获取过验证码
 const formRef = ref();
+const loading = ref(false);
 
 const form = reactive({
   email: "",
@@ -72,16 +78,49 @@ const form = reactive({
 const currentStep = ref(1);
 const username = ref("");
 
+// 正则
+const emailRe = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+// 校验规则
 const rules = {
   email: [
     { required: true, message: "请输入邮箱", trigger: "blur" },
-    { type: "email", message: "邮箱格式不正确", trigger: "blur" },
+    {
+      validator(_: any, value: string, cb: (err?: Error) => void) {
+        if (!emailRe.test(value)) return cb(new Error("请输入正确的邮箱"));
+        cb();
+      },
+      trigger: "blur",
+    },
   ],
-  code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
+  code: [
+    { required: true, message: "请输入验证码", trigger: "blur" },
+    {
+      validator(_: any, value: string, cb: (err?: Error) => void) {
+        if (!value) {
+          cb(new Error("请输入邮箱验证码"));
+          return;
+        }
+        if (!/^\d{6}$/.test(value)) {
+          cb(new Error("验证码格式不正确，应为6位数字"));
+          return;
+        }
+        cb();
+      },
+      trigger: "blur",
+    },
+  ],
 };
-
+// 从找用户名失败的页面返回
+const handleCurrentStep = (step: number) => {
+  currentStep.value = step;
+  formRef.value?.resetFields();
+  form.email = "";
+  form.code = "";
+};
+// 发送验证码
 const handleSendCode = async () => {
   if (!form.email) return ElMessage.warning("请输入邮箱");
+  if (!emailRe.test(form.email)) return ElMessage.warning("请输入正确的邮箱");
   try {
     let payload: getCodeParams;
     payload = {
@@ -103,42 +142,37 @@ const handleSendCode = async () => {
     ElMessage.error("发送失败，请稍后再试");
   }
 };
-
+// 下一步
 const handleNext = async () => {
-  let payload: any;
-  payload = {
-    recipient: form.email?.trim(),
-    code: form.code?.trim(),
-    type: "CODE_BUSINESS_TYPE_FORGET_PWD",
-  };
-  const res = await verifyCodeApi(payload);
-  if (res.code === 200) {
-    let payload: any;
-    payload = {
-      email: form.email?.trim(),
-    };
-    const res = await forgetUsernameApi(payload);
-    if (res.code === 200) {
-      username.value = res.data.username;
-      currentStep.value = 2;
-    } else {
-      currentStep.value = 3;
+  if (!formRef.value) return;
+  (formRef.value as any).validate(async (valid: boolean) => {
+    if (!valid) return;
+    loading.value = true;
+    try {
+      let payload: any;
+      payload = {
+        recipient: form.email?.trim(),
+        code: form.code?.trim(),
+        type: "CODE_BUSINESS_TYPE_FORGET_PWD",
+      };
+      const res = await verifyCodeApi(payload);
+      if (res.code === 200) {
+        let payload: any;
+        payload = {
+          email: form.email?.trim(),
+        };
+        const res = await forgetUsernameApi(payload);
+        if (res.code === 200) {
+          username.value = res.data.username;
+          currentStep.value = 2;
+        } else {
+          currentStep.value = 3;
+        }
+      }
+    } finally {
+      loading.value = false;
     }
-  }
-  //   try {
-  // await (formRef.value as any).validate();
-  // const res = await findUsername(form.email, form.code);
-  // if (res.data.username) {
-  //   router.push({
-  //     path: "/find-success",
-  //     query: { username: res.data.username },
-  //   });
-  // } else {
-  //   ElMessage.error("验证码错误或邮箱不存在");
-  // }
-  //   } catch {
-  // 校验失败
-  //   }
+  });
 };
 
 const handlePrev = () => {
@@ -165,10 +199,12 @@ const handlePrev = () => {
       display: flex;
       gap: 10px;
       :deep(.el-input) {
-        width: 293px;
+        width: 270px;
       }
       :deep(.el-button) {
+        width: 120px;
         height: 42px;
+        font-weight: 400;
       }
     }
     .btn-group {
