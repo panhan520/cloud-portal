@@ -43,7 +43,7 @@ export default defineConfig(async ({ mode }) => {
           changeOrigin: true,
         },
         "/user-proxy": {
-          target: "http://172.31.40.103:8000",
+          target: "https://gateway.observe.dev.eks.gainetics.io",
           changeOrigin: true,
           rewrite: (path:string) => path.replace(/^\/user-proxy/, ''),
         },
