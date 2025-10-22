@@ -192,19 +192,16 @@ async function handleSubmit() {
       };
 
       const res: Record<string, any> = await loginApi(payload);
-      console.log("res", res);
-      if (res.code === 200) {
-        const token = res.data.token;
-        // 解析 jwt
-        const decoded = jwtDecode<
-          JwtPayload & { tenantId: string; orgId: string; username: string }
-        >(token);
-        UserStore.setLoginInfo(token, res.data.uid, decoded);
-        ElMessage.success("登录成功");
-        router.push({
-          path: "/",
-        });
-      }
+      const token = res.data.token;
+      // 解析 jwt
+      const decoded = jwtDecode<
+        JwtPayload & { tenantId: string; orgId: string; username: string }
+      >(token);
+      UserStore.setLoginInfo(token, res.data.uid, decoded);
+      ElMessage.success("登录成功");
+      router.push({
+        path: "/",
+      });
     } catch (err: any) {
       // 这里可根据 err.response 做更细的处理
       console.error("登录失败", err);

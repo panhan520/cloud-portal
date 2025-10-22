@@ -380,7 +380,7 @@ async function handleSubmit() {
         code: form.code?.trim(),
       };
 
-      const res = await registryApi(payload);
+      await registryApi(payload);
       ElMessage.success("注册成功");
       goTo("/login");
     } catch (err: any) {

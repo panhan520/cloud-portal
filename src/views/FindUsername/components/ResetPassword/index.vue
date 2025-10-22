@@ -86,7 +86,9 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="handleCancel">取消</el-button>
-        <el-button type="primary" @click="handleConfirm"> 确定 </el-button>
+        <el-button type="primary" @click="handleConfirm" :loading="loading">
+          确定
+        </el-button>
       </div>
     </template>
   </el-dialog>
@@ -100,13 +102,16 @@ import {
   SuccessFilled,
   CircleCloseFilled,
 } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
+import "element-plus/theme-chalk/el-message.css";
+import { forgetPwdApi } from "@/api/login";
 const props = defineProps<{
   modelValue: boolean;
+  email: string;
+  code: string;
 }>();
-
 const emit = defineEmits<{
   (e: "update:modelValue", value: boolean): void;
-  (e: "confirm"): void;
   (e: "close"): void;
 }>();
 
@@ -122,14 +127,11 @@ const validRule = reactive({
 });
 // 表单数据
 const form = reactive({
-  email: "",
-  passwordEmail: "",
-  username: "",
   password: "",
   rePassword: "",
-  code: "",
-  agree: false,
 });
+const formRef = ref();
+const loading = ref(false);
 // 校验规则
 const rules = {
   password: [
@@ -219,7 +221,25 @@ const handleCancel = () => {
 };
 
 const handleConfirm = () => {
-  emit("confirm");
+  if (!formRef.value) return;
+  (formRef.value as any).validate(async (valid: boolean) => {
+    if (!valid) return;
+    loading.value = true;
+    try {
+      let payload = {
+        email: props.email?.trim(),
+        pwd: form.password,
+        code: props.code?.trim(),
+      };
+      await forgetPwdApi(payload);
+      ElMessage.success("重置密码成功");
+      emit("close");
+    } catch (err: any) {
+      console.error("失败", err);
+    } finally {
+      loading.value = false;
+    }
+  });
 };
 
 const checkPasswordStrength = (val: string) => {

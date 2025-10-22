@@ -44,7 +44,12 @@
       </el-tab-pane>
     </el-tabs>
     <!-- 找回成功 -->
-    <FindSuccess v-if="currentStep === 2" :username="username" />
+    <FindSuccess
+      v-if="currentStep === 2"
+      :username="username"
+      :email="form.email"
+      :code="form.code"
+    />
     <!-- 找回失败 -->
     <FindFail
       v-if="currentStep === 3"
@@ -128,16 +133,14 @@ const handleSendCode = async () => {
       recipient: form.email?.trim(),
       type: "CODE_BUSINESS_TYPE_FORGET_PWD",
     };
-    const res = await getCodeApi(payload);
-    if (res.code === 200) {
-      ElMessage.success("验证码已发送");
-      hasGotCode.value = true; // 标记已获取过验证码
-      countdown.value = 60;
-      timer.value = window.setInterval(() => {
-        countdown.value--;
-        if (countdown.value <= 0) clearInterval(timer.value);
-      }, 1000);
-    }
+    await getCodeApi(payload);
+    ElMessage.success("验证码已发送");
+    hasGotCode.value = true; // 标记已获取过验证码
+    countdown.value = 60;
+    timer.value = window.setInterval(() => {
+      countdown.value--;
+      if (countdown.value <= 0) clearInterval(timer.value);
+    }, 1000);
   } catch (error) {
     ElMessage.error("发送失败，请稍后再试");
   }

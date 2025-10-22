@@ -22,7 +22,8 @@
     <!-- 重置密码弹框组件 -->
     <ResetPassword
       v-model="showResetDialog"
-      @confirm="handleResetConfirm"
+      :email="props.email"
+      :code="props.code"
       @close="handleResetDialogClose"
     />
   </div>
@@ -39,6 +40,8 @@ import ResetPassword from "../ResetPassword/index.vue";
 const router = useRouter();
 const props = defineProps<{
   username: string;
+  email: string;
+  code: string;
 }>();
 const username = props.username;
 
@@ -52,11 +55,6 @@ const handleCopy = async () => {
 
 const handleReset = () => {
   showResetDialog.value = true;
-};
-
-const handleResetConfirm = () => {
-  showResetDialog.value = false;
-  ElMessage.success("密码重置请求已提交");
 };
 
 const handleResetDialogClose = () => {

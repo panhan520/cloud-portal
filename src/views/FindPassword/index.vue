@@ -10,7 +10,13 @@
     </el-steps>
 
     <div class="step-content">
-      <component :is="currentComponent" @next="handleNext" @prev="handlePrev" />
+      <component
+        :is="currentComponent"
+        @next="handleNext"
+        @prev="handlePrev"
+        :email="email"
+        :code="code"
+      />
     </div>
   </div>
 </template>
@@ -22,12 +28,19 @@ import StepVerify from "./StepVerify.vue";
 import StepReset from "./StepReset.vue";
 import StepFinish from "./StepFinish.vue";
 
-const activeStep = ref(0);
-
+const activeStep = ref(1);
+const email = ref("");
+const code = ref("");
 const components = [StepAccount, StepVerify, StepReset, StepFinish];
 const currentComponent = computed(() => components[activeStep.value]);
 
-function handleNext() {
+function handleNext(val: string) {
+  if (activeStep.value === 0) {
+    email.value = val;
+  }
+  if (activeStep.value === 1) {
+    code.value = val;
+  }
   if (activeStep.value < 3) activeStep.value++;
 }
 
@@ -37,6 +50,19 @@ function handlePrev() {
 </script>
 
 <style lang="less" scoped>
+:deep(.el-step__head.is-process) {
+  color: #1664ff;
+  .is-text {
+    background: #1664ff;
+    color: #ffffff;
+  }
+}
+:deep(.el-step__title) {
+  font-size: 14px;
+}
+:deep(.el-step__title.is-process) {
+  color: #1664ff;
+}
 .forgot-container {
   max-width: 500px;
   margin: 100px auto;

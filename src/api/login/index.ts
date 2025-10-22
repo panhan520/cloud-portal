@@ -45,3 +45,8 @@ export const forgetUsernameApi = (
 export const forgetPwdApi = (data: any): Promise<ApiResponse<{}>> => {
   return userAxios.post("/api/v1/iam/pwd/forget", data);
 };
+
+// 检查邮箱是否存在
+export const emailCheckApi = (data: any): Promise<ApiResponse<{}>> => {
+  return userAxios.post("/api/v1/iam/email/check", data);
+};
