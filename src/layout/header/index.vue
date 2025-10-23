@@ -65,27 +65,85 @@
     </div>
 
     <div class="vce-header-right">
-      <div @click="goToPage('/login')" class="cursor-pointer">登录</div>
-      <div
-        @click="goToPage('/register')"
-        class="register-button cursor-pointer"
-      >
-        注册
-      </div>
-      <el-dropdown trigger="click" @command="handleDropdownCommand">
-        <template #default>
-          <div class="user-wrap">
-            <div class="avatar">H</div>
-            <i class="arrow"></i>
-          </div>
-        </template>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item command="profile">个人中心</el-dropdown-item>
-            <el-dropdown-item command="logout">退出登录</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+      <!-- 未登录状态 -->
+      <template v-if="!isLoggedIn">
+        <div @click="goToPage('/login')" class="cursor-pointer">登录</div>
+        <div
+          @click="goToPage('/register')"
+          class="register-button cursor-pointer"
+        >
+          注册
+        </div>
+      </template>
+
+      <!-- 已登录状态 -->
+      <template v-else>
+        <el-dropdown
+          trigger="click"
+          @command="handleDropdownCommand"
+          placement="bottom-end"
+        >
+          <template #default>
+            <div class="user-wrap">
+              <div class="avatar">{{ userInitial }}</div>
+              <i class="arrow"></i>
+            </div>
+          </template>
+          <template #dropdown>
+            <div class="user-info-dropdown">
+              <div class="user-info-header">
+                {{ getVerificationStatus() }}
+              </div>
+              <div class="user-info-card">
+                <div class="user-avatar">
+                  <img :src="userAvatar" alt="用户头像" />
+                </div>
+                <div class="user-details">
+                  <div class="user-name-row">
+                    <span class="username">{{ userInfo.username }}</span>
+                    <span
+                      class="account-management"
+                      @click="goToAccountManagement"
+                      >账号管理 ></span
+                    >
+                  </div>
+                  <div class="account-id">账号ID: {{ userOrg.userId }}</div>
+                  <div class="user-actions">
+                    <div
+                      v-if="!isVerified"
+                      class="verify-action"
+                      @click="goToVerification"
+                    >
+                      完成实名认证 >
+                    </div>
+                    <div v-else class="account-badges">
+                      <span class="badge main-account" v-if="isMainAccount"
+                        >主账号</span
+                      >
+                      <span class="badge sub-account" v-if="isSubAccount"
+                        >子账号</span
+                      >
+                      <span
+                        class="badge enterprise-verify"
+                        @click="goToEnterpriseVerification"
+                      >
+                        企业认证 >
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    class="logout-button"
+                    :Loading="loading"
+                    @click="handleLogout"
+                  >
+                    退出登录
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </el-dropdown>
+      </template>
     </div>
     <!-- 左侧抽屉菜单 -->
     <el-drawer
@@ -109,20 +167,50 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { Search, Grid } from "@element-plus/icons-vue";
+import { useUserStore } from "@/store/modules/user";
+import { getToken } from "@/utils/auth";
 import logo from "@/assets/svgs/logo.svg";
+import { logoutApi } from "@/api/login";
 
 type DropdownCommand = string | number | Record<string, any>;
 
 const router = useRouter();
+const userStore = useUserStore();
 const searchText = ref("");
 const drawerVisible = ref(false);
+const loading = ref(false);
+
+// 登录状态
+const isLoggedIn = computed(() => {
+  return !!getToken() && !!userStore.userInfo.username;
+});
+
+// 用户信息
+const userInfo = computed(() => userStore.userInfo);
+const userOrg = computed(() => userStore.userOrg);
+
+// 用户头像和首字母
+const userAvatar = ref(
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=yimoyangguang666"
+);
+const userInitial = computed(() => {
+  const username = userInfo.value.username || "yimoyangguang666";
+  return username.charAt(0).toUpperCase();
+});
+
+// 认证状态（模拟数据，实际应该从后端获取）
+const isVerified = ref(true); // 可以根据实际需求调整
+const isMainAccount = ref(true); // 可以根据实际需求调整
+const isSubAccount = ref(false); // 可以根据实际需求调整
+
 const toggleDrawer = () => {
   console.log("toggleDrawer", drawerVisible.value);
   drawerVisible.value = !drawerVisible.value;
 };
+
 const openDrawer = () => {
   drawerVisible.value = true;
 };
@@ -131,7 +219,44 @@ const handleDropdownCommand = (cmd: DropdownCommand) => {
   if (cmd === "profile") {
     // router.push("/profile");
   } else if (cmd === "logout") {
-    console.log("logout");
+    handleLogout();
+  }
+};
+
+const getVerificationStatus = () => {
+  if (!isVerified.value) {
+    return "未认证:";
+  } else if (isMainAccount.value) {
+    return "已认证 (主账号):";
+  } else if (isSubAccount.value) {
+    return "已认证 (子账号):";
+  }
+  return "已认证:";
+};
+
+const goToAccountManagement = () => {
+  console.log("跳转到账号管理");
+  // router.push("/account-management");
+};
+
+const goToVerification = () => {
+  console.log("跳转到实名认证");
+  // router.push("/verification");
+};
+
+const goToEnterpriseVerification = () => {
+  console.log("跳转到企业认证");
+  // router.push("/enterprise-verification");
+};
+
+const handleLogout = async () => {
+  loading.value = true;
+  try {
+    await logoutApi();
+    userStore.clearInfo();
+    router.push("/login");
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -315,6 +440,138 @@ const goToPage = (path: string) => {
       &:hover {
         background: rgba(22, 100, 255, 0.08);
         color: #1664ff;
+      }
+    }
+  }
+}
+
+// 用户信息下拉框样式
+:deep(.el-dropdown-menu) {
+  padding: 0;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.user-info-dropdown {
+  width: 320px;
+  background: white;
+
+  .user-info-header {
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .user-info-card {
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+
+    .user-avatar {
+      flex-shrink: 0;
+
+      img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+
+    .user-details {
+      flex: 1;
+
+      .user-name-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+
+        .username {
+          font-size: 16px;
+          font-weight: 500;
+          color: #333;
+        }
+
+        .account-management {
+          font-size: 12px;
+          color: #666;
+          cursor: pointer;
+
+          &:hover {
+            color: #1664ff;
+          }
+        }
+      }
+
+      .account-id {
+        font-size: 12px;
+        color: #999;
+        margin-bottom: 12px;
+      }
+
+      .user-actions {
+        margin-bottom: 16px;
+
+        .verify-action {
+          font-size: 14px;
+          color: #1664ff;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        .account-badges {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+
+          .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            border: 1px solid #e0e0e0;
+            background: #f5f5f5;
+            color: #666;
+            cursor: pointer;
+
+            &.main-account,
+            &.sub-account {
+              cursor: default;
+            }
+
+            &.enterprise-verify:hover {
+              background: #e6f3ff;
+              border-color: #1664ff;
+              color: #1664ff;
+            }
+          }
+        }
+      }
+
+      .logout-button {
+        width: 100%;
+        padding: 8px 16px;
+        background: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        text-align: center;
+        font-size: 14px;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background: #e0e0e0;
+          color: #333;
+        }
       }
     }
   }

@@ -24,7 +24,7 @@
           <template #reference>
             <el-input
               v-model="form.password"
-              placeholder="设置你的登录密码"
+              placeholder="请输入新密码"
               :type="showPassword ? 'text' : 'password'"
               @input="checkPasswordStrength"
               @focus="isPopoverVisible = true"
@@ -71,7 +71,7 @@
       <el-form-item prop="rePassword">
         <el-input
           v-model="form.rePassword"
-          placeholder="请再次输入你的密码"
+          placeholder="确认密码"
           :type="showPasswordRe ? 'text' : 'password'"
         >
           <template #suffix>

@@ -28,7 +28,7 @@ import StepVerify from "./StepVerify.vue";
 import StepReset from "./StepReset.vue";
 import StepFinish from "./StepFinish.vue";
 
-const activeStep = ref(1);
+const activeStep = ref(0);
 const email = ref("");
 const code = ref("");
 const components = [StepAccount, StepVerify, StepReset, StepFinish];

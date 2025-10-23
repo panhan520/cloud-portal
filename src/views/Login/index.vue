@@ -1,121 +1,129 @@
 <template>
-  <div class="login-wrap">
-    <div class="logo-top" @click="goTo('/')">
-      <img :src="logo" alt="logo" />
-      GAINETICS
-    </div>
-    <!-- 左侧 -->
-    <div class="promo">
-      <img :src="sideLogo" alt="" />
-    </div>
+  <div class="login-container">
+    <div class="login-wrap" v-if="activeStep === 1">
+      <div class="logo-top" @click="goTo('/')">
+        <img :src="logo" alt="logo" />
+        GAINETICS
+      </div>
+      <!-- 左侧 -->
+      <div class="promo">
+        <img :src="sideLogo" alt="" />
+      </div>
 
-    <!-- 右侧登录卡片 -->
-    <div class="login-card">
-      <el-card class="card-body">
-        <div class="title">登录GAINETICS账号</div>
+      <!-- 右侧登录卡片 -->
+      <div class="login-card">
+        <el-card class="card-body">
+          <div class="title">登录GAINETICS账号</div>
 
-        <el-tabs v-model="form.type" class="login-tabs">
-          <el-tab-pane label="邮箱登录" name="email" />
-          <el-tab-pane label="账号登录" name="account" />
-        </el-tabs>
+          <el-tabs v-model="form.type" class="login-tabs">
+            <el-tab-pane label="邮箱登录" name="email" />
+            <el-tab-pane label="账号登录" name="account" />
+          </el-tabs>
 
-        <el-form
-          ref="formRef"
-          :model="form"
-          :rules="rules"
-          label-position="top"
-          class="login-form"
-        >
-          <!-- 邮箱登录 -->
-          <template v-if="form.type === 'email'">
-            <el-form-item prop="email">
-              <el-input
-                v-model="form.email"
-                placeholder="请输入邮箱"
-                @keyup.enter.native="handleSubmit"
-              />
-            </el-form-item>
-            <el-form-item prop="passwordEmail">
-              <el-input
-                v-model="form.passwordEmail"
-                placeholder="请输入密码"
-                :type="showPassword ? 'text' : 'password'"
-                @keyup.enter.native="handleSubmit"
+          <el-form
+            ref="formRef"
+            :model="form"
+            :rules="rules"
+            label-position="top"
+            class="login-form"
+          >
+            <!-- 邮箱登录 -->
+            <template v-if="form.type === 'email'">
+              <el-form-item prop="email">
+                <el-input
+                  v-model="form.email"
+                  placeholder="请输入邮箱"
+                  @keyup.enter.native="handleSubmit"
+                />
+              </el-form-item>
+              <el-form-item prop="passwordEmail">
+                <el-input
+                  v-model="form.passwordEmail"
+                  placeholder="请输入密码"
+                  :type="showPassword ? 'text' : 'password'"
+                  @keyup.enter.native="handleSubmit"
+                >
+                  <template #suffix>
+                    <el-button
+                      @click="showPassword = !showPassword"
+                      type="text"
+                      icon
+                    >
+                      <el-icon
+                        ><View v-if="showPassword" /> <Hide v-else
+                      /></el-icon>
+                    </el-button> </template
+                ></el-input>
+              </el-form-item>
+            </template>
+            <!-- 账号登录 -->
+            <template v-else>
+              <el-form-item prop="username">
+                <el-input
+                  v-model="form.username"
+                  placeholder="请输入用户名称"
+                  autocomplete="username"
+                  @keyup.enter.native="handleSubmit"
+                />
+              </el-form-item>
+
+              <el-form-item prop="password">
+                <el-input
+                  v-model="form.password"
+                  :type="showPassword ? 'text' : 'password'"
+                  placeholder="请输入密码"
+                  autocomplete="current-password"
+                  @keyup.enter.native="handleSubmit"
+                >
+                  <template #suffix>
+                    <el-button
+                      @click="showPassword = !showPassword"
+                      type="text"
+                      icon
+                    >
+                      <el-icon
+                        ><View v-if="showPassword" /> <Hide v-else
+                      /></el-icon>
+                    </el-button>
+                  </template>
+                </el-input>
+              </el-form-item>
+            </template>
+
+            <div class="login-line">
+              登录视为您已阅读并同意GAINETICS<span>用户协议</span>和<span
+                >隐私政策</span
               >
-                <template #suffix>
-                  <el-button
-                    @click="showPassword = !showPassword"
-                    type="text"
-                    icon
-                  >
-                    <el-icon
-                      ><View v-if="showPassword" /> <Hide v-else
-                    /></el-icon>
-                  </el-button> </template
-              ></el-input>
-            </el-form-item>
-          </template>
-          <!-- 账号登录 -->
-          <template v-else>
-            <el-form-item prop="username">
-              <el-input
-                v-model="form.username"
-                placeholder="请输入用户名称"
-                autocomplete="username"
-                @keyup.enter.native="handleSubmit"
-              />
-            </el-form-item>
+            </div>
 
-            <el-form-item prop="password">
-              <el-input
-                v-model="form.password"
-                :type="showPassword ? 'text' : 'password'"
-                placeholder="请输入密码"
-                autocomplete="current-password"
-                @keyup.enter.native="handleSubmit"
+            <el-form-item>
+              <el-button
+                type="primary"
+                :loading="loading"
+                style="width: 100%"
+                @click="handleSubmit"
+                class="login-btn"
+                >登录</el-button
               >
-                <template #suffix>
-                  <el-button
-                    @click="showPassword = !showPassword"
-                    type="text"
-                    icon
-                  >
-                    <el-icon
-                      ><View v-if="showPassword" /> <Hide v-else
-                    /></el-icon>
-                  </el-button>
-                </template>
-              </el-input>
             </el-form-item>
-          </template>
+            <div class="login-bottom">
+              <div class="forgot" @click="goTo('/findUsername')">忘记账号</div>
+              <div class="forgot" @click="goTo('/findPassword')">忘记密码</div>
+            </div>
 
-          <div class="login-line">
-            登录视为您已阅读并同意GAINETICS<span>用户协议</span>和<span
-              >隐私政策</span
-            >
-          </div>
-
-          <el-form-item>
-            <el-button
-              type="primary"
-              :loading="loading"
-              style="width: 100%"
-              @click="handleSubmit"
-              class="login-btn"
-              >登录</el-button
-            >
-          </el-form-item>
-          <div class="login-bottom">
-            <div class="forgot" @click="goTo('/findUsername')">忘记账号</div>
-            <div class="forgot" @click="goTo('/findPassword')">忘记密码</div>
-          </div>
-
-          <div class="register">
-            没有账号？ <span @click="goTo('/register')">现在就注册</span>
-          </div>
-        </el-form>
-      </el-card>
+            <div class="register">
+              没有账号？ <span @click="goTo('/register')">现在就注册</span>
+            </div>
+          </el-form>
+        </el-card>
+      </div>
     </div>
+    <ChangePwd
+      v-if="activeStep === 2"
+      :oldPwd="form.type === 'account' ? form.password : form.passwordEmail"
+      @next="handleNext"
+    ></ChangePwd>
+    <StepFinish v-if="activeStep === 3"></StepFinish>
   </div>
 </template>
 
@@ -124,20 +132,23 @@ import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import "element-plus/theme-chalk/el-message.css";
-import { loginApi } from "@/api/login";
-import type { LoginParams, ApiResponse } from "@/api/login/types";
+import { loginApi, pwdChangeApi } from "@/api/login";
+import type { LoginParams } from "@/api/login/types";
 import { useUserStore } from "@/store/modules/user";
 import logo from "@/assets/svgs/logo.svg";
 import sideLogo from "@/assets/login/side-logo.svg";
 import { View, Hide } from "@element-plus/icons-vue";
 import { jwtDecode } from "jwt-decode";
 import type { JwtPayload } from "jwt-decode";
+import ChangePwd from "./ChangePwd.vue";
+import StepFinish from "./StepFinish.vue";
 
 const router = useRouter();
 const UserStore = useUserStore();
 const formRef = ref();
 const loading = ref(false);
 const showPassword = ref(false);
+const activeStep = ref(1);
 
 // 表单数据
 const form = reactive({
@@ -197,11 +208,15 @@ async function handleSubmit() {
       const decoded = jwtDecode<
         JwtPayload & { tenantId: string; orgId: string; username: string }
       >(token);
-      UserStore.setLoginInfo(token, res.data.uid, decoded);
+      UserStore.setLoginInfo(token, res.data.userId, decoded);
       ElMessage.success("登录成功");
-      router.push({
-        path: "/",
-      });
+      if (!res.data.needChangePwd) {
+        activeStep.value = 2;
+      } else {
+        router.push({
+          path: "/",
+        });
+      }
     } catch (err: any) {
       // 这里可根据 err.response 做更细的处理
       console.error("登录失败", err);
@@ -212,6 +227,9 @@ async function handleSubmit() {
 }
 function goTo(path: string) {
   router.push({ path: path });
+}
+function handleNext() {
+  if (activeStep.value < 3) activeStep.value++;
 }
 </script>
 

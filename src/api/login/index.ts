@@ -13,7 +13,7 @@ const userAxios = getReqByProxyModule({ proxyModule: PROXY.USER });
 // 用户登录接口
 export const loginApi = (
   data: LoginParams
-): Promise<ApiResponse<{ token: string; uid: string }>> => {
+): Promise<ApiResponse<{ token: string; userId: string }>> => {
   return userAxios.post("/api/v1/iam/login", data);
 };
 
@@ -49,4 +49,14 @@ export const forgetPwdApi = (data: any): Promise<ApiResponse<{}>> => {
 // 检查邮箱是否存在
 export const emailCheckApi = (data: any): Promise<ApiResponse<{}>> => {
   return userAxios.post("/api/v1/iam/email/check", data);
+};
+
+// 用户登出
+export const logoutApi = (): Promise<ApiResponse<{}>> => {
+  return userAxios.get("/api/v1/iam/logout");
+};
+
+// 用户修改密码
+export const pwdChangeApi = (data: any): Promise<ApiResponse<{}>> => {
+  return userAxios.patch("/api/v1/iam/pwd/change", data);
 };

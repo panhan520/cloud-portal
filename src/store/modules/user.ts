@@ -1,15 +1,15 @@
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import { setToken } from "@/utils/auth";
 
 export const useUserStore = defineStore(
   "userState",
   () => {
-    const userInfo = reactive({
+    const userInfo = ref({
       username: "",
       email: "",
     });
-    const userOrg = reactive({
+    const userOrg = ref({
       userId: "",
       orgId: "",
       tenantId: "",
@@ -18,7 +18,7 @@ export const useUserStore = defineStore(
       localStorage.roles ? JSON.parse(localStorage.roles) : []
     );
     const setUserEmail = (email: string) => {
-      userInfo.email = email;
+      userInfo.value.email = email;
     };
     // const login = async (user: { username: string; password: string }) => {
     //   try {
@@ -44,10 +44,18 @@ export const useUserStore = defineStore(
     // }
     const setLoginInfo = (token: string, uid: string, decoded: any) => {
       setToken(token);
-      userOrg.tenantId = decoded.tenantId;
-      userOrg.orgId = decoded.orgId;
-      userOrg.userId = uid;
-      userInfo.username = decoded.username;
+      userOrg.value.tenantId = decoded.tenantId;
+      userOrg.value.orgId = decoded.orgId;
+      userOrg.value.userId = uid;
+      userInfo.value.username = decoded.username;
+
+      // 调试信息
+      console.log("setLoginInfo 调用后，userInfo:", userInfo.value);
+      console.log("setLoginInfo 调用后，userOrg:", userOrg.value);
+      console.log(
+        "localStorage 中的 userState:",
+        localStorage.getItem("userState")
+      );
     };
     const getRoles = () => {
       return new Promise<string[]>((resolve) => {
@@ -64,11 +72,11 @@ export const useUserStore = defineStore(
     };
     const clearInfo = () => {
       // 清空状态
-      userInfo.username = "";
-      userInfo.email = "";
-      userOrg.userId = "";
-      userOrg.orgId = "";
-      userOrg.tenantId = "";
+      userInfo.value.username = "";
+      userInfo.value.email = "";
+      userOrg.value.userId = "";
+      userOrg.value.orgId = "";
+      userOrg.value.tenantId = "";
       roles.value = [];
       // 清空存储
       localStorage.clear();

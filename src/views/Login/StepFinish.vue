@@ -7,7 +7,7 @@
     <img :src="successIcon" alt="success" width="80" />
     <div class="success-title">修改密码成功</div>
     <div class="success-desc">
-      <span>{{ countdown }}s</span>后自动跳到登录页
+      <span>{{ countdown }}s</span>后自动跳转到系统
     </div>
     <el-button type="primary" @click="goLogin">完成</el-button>
   </div>
@@ -29,7 +29,7 @@ function goLogin() {
     clearInterval(timer);
     timer = null;
   }
-  router.push("/login");
+  router.push("/home");
 }
 
 // 开始倒计时
@@ -58,8 +58,13 @@ onUnmounted(() => {
 
 <style lang="less" scoped>
 .step-finish {
+  width: 500px;
+  margin: 100px auto;
   text-align: center;
-  margin-top: 50px;
+  .success-text {
+    font-size: 13px;
+    margin: 30px auto;
+  }
   .success-title {
     font-size: 14px;
     margin: 15px 0;
@@ -74,7 +79,7 @@ onUnmounted(() => {
     }
   }
   .el-button {
-    width: 80%;
+    width: 380px;
   }
 }
 </style>
