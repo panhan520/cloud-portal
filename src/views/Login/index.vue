@@ -210,7 +210,7 @@ async function handleSubmit() {
       >(token);
       UserStore.setLoginInfo(token, res.data.userId, decoded);
       ElMessage.success("登录成功");
-      if (!res.data.needChangePwd) {
+      if (res.data.needChangePwd) {
         activeStep.value = 2;
       } else {
         router.push({
