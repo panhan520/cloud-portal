@@ -1,9 +1,5 @@
 <template>
   <div class="step-finish">
-    <h2>修改密码</h2>
-    <div class="success-text">
-      为保障您的账户安全，请首次登录后修改密码。修改成功后将自动进入系统。
-    </div>
     <img :src="successIcon" alt="success" width="80" />
     <div class="success-title">修改密码成功</div>
     <div class="success-desc">
