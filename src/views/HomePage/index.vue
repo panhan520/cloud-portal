@@ -158,15 +158,16 @@ const goToAccessControl = () => {
 }
 
 .top-nav {
-  padding: 16px 24px;
+  padding: 10px 24px;
   background: white;
   border-bottom: 1px solid #e9ecef;
 
   .nav-tab {
+    display: inline-block;
     font-size: 16px;
     font-weight: 500;
     color: #666;
-    padding: 8px 0;
+    padding: 8px;
     border-bottom: 2px solid transparent;
     cursor: pointer;
 
