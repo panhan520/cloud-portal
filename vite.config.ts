@@ -8,6 +8,7 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 
 export default defineConfig(async ({ mode }) => {
   return {
+    base: (import.meta as any).env.VITE_BASE_PATH,
     plugins: [
       vue(),
       vueJsxPlugin(),
