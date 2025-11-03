@@ -212,7 +212,7 @@ watch(dialogVisible, (newVal) => {
   emit("update:modelValue", newVal);
 });
 
-const handleClose = (done: () => void) => {
+const handleClose = (_done: () => void) => {
   emit("close");
 };
 

@@ -39,13 +39,13 @@ export default defineConfig(async ({ mode }) => {
           // rewrite: (path) => path.replace(/^\/mock/, '')
         },
         "/apis": {
-          target: "http://172.31.36.140:11001",
+          target: "https://www.dev.wafscloud.com",
           changeOrigin: true,
         },
         "/user-proxy": {
           target: "https://gateway.observe.dev.eks.gainetics.io",
           changeOrigin: true,
-          rewrite: (path:string) => path.replace(/^\/user-proxy/, ''),
+          rewrite: (path: string) => path.replace(/^\/user-proxy/, ""),
         },
       },
     },

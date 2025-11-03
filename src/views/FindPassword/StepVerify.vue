@@ -8,7 +8,7 @@
 
     <div class="code-box">
       <el-input
-        v-for="(val, index) in codes"
+        v-for="(_val, index) in codes"
         :key="index"
         v-model="codes[index]"
         maxlength="1"

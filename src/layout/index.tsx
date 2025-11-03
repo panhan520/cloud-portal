@@ -1,20 +1,19 @@
-import { defineComponent } from 'vue'
-import { RouterView } from 'vue-router'
-import { useMaster, MicroApp } from '~/qiankun/src/master'
-import Header from './header'
-import SideBar from './sideBar'
+import { defineComponent } from "vue";
+import { useMaster, MicroApp } from "@/qiankun/src/master";
+import Header from "./header/index.vue";
+import SideBar from "./sideBar/index.tsx";
 
 export default defineComponent({
-  name: 'Layout',
+  name: "Layout",
   setup() {
-    const { actions, globalState } = useMaster()
+    const { actions, globalState } = useMaster();
     actions.value.setGlobalState({
       ...globalState.value,
       userInfo: {
-        name: 'asdasdd',
+        name: "asdasdd",
         age: 12,
-      }
-    })
+      },
+    });
     return () => (
       <>
         <Header />
@@ -22,6 +21,6 @@ export default defineComponent({
         {/* <RouterView />  // TODO: 测试用，后续改回RouterView */}
         <MicroApp />
       </>
-    )
-  }
-})
+    );
+  },
+});

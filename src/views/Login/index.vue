@@ -132,7 +132,7 @@ import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import "element-plus/theme-chalk/el-message.css";
-import { loginApi, pwdChangeApi } from "@/api/login";
+import { loginApi } from "@/api/login";
 import type { LoginParams } from "@/api/login/types";
 import { useUserStore } from "@/store/modules/user";
 import logo from "@/assets/svgs/logo.svg";

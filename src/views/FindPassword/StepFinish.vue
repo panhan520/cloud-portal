@@ -16,7 +16,7 @@ import successIcon from "@/assets/login/success.svg";
 
 const router = useRouter();
 const countdown = ref(5); // 初始倒计时5秒
-let timer: number | null = null;
+let timer: ReturnType<typeof setInterval> | null = null;
 
 // 跳转到登录页
 function goLogin() {

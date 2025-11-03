@@ -77,10 +77,9 @@
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
-import { ElMessage } from "element-plus";
 // import { loginApi } from "@/api/login";
 import hiIcon from "@/assets/login/hi.svg";
-import type { LoginParams } from "@/api/login/types";
+// import type { LoginParams } from "@/api/login/types";
 import logo from "@/assets/svgs/logo.svg";
 import sideLogo from "@/assets/login/side-logo.svg";
 import { View, Hide } from "@element-plus/icons-vue";
@@ -132,19 +131,16 @@ async function handleSubmit() {
     loading.value = true;
 
     try {
-      let payload: LoginParams;
-      payload = {
-        username: form.username?.trim(),
-        email: form.email?.trim(),
-        password: form.type === "account" ? form.password : form.passwordEmail,
-        type: form.type,
-      };
-
+      // const payload: LoginParams = {
+      //   username: form.username?.trim(),
+      //   email: form.email?.trim(),
+      //   password: form.type === "account" ? form.password : form.passwordEmail,
+      //   type: form.type,
+      // };
       //   const res = await loginApi(payload);
       //   假设 res.token 存在
       //   if (res?.token) {
       //     sessionStorage.setItem("ACCESS_TOKEN", res.token);
-
       //     ElMessage.success("登录成功");
       //   router.replace({ name: "Dashboard" });
       //   } else {
