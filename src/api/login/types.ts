@@ -1,8 +1,8 @@
 export interface LoginParams {
-  username: string;
+  username?: string;
   password: string;
   email?: string;
-  type?: string;
+  type: string;
   phone?: string; // 预留：手机号
 }
 

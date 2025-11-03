@@ -27,7 +27,7 @@
           </div>
           <div class="card-content">
             <div class="account-info">
-              <div class="account-avatar">H</div>
+              <div class="account-avatar">{{ userInitial }}</div>
               <div class="account-details">
                 <div class="account-badge">主账号</div>
                 <div class="account-name">{{ userInfo.username }}</div>
@@ -45,52 +45,42 @@
       <!-- 第二行 -->
       <div class="content-row">
         <el-card class="content-card service-card">
-          <div class="service-card-content">
+          <div
+            v-for="service in serviceList"
+            :key="service.id"
+            class="service-card-content"
+          >
             <div class="card-header">
-              <h3 class="card-title">多云CDN</h3>
+              <h3 class="card-title">{{ service.title }}</h3>
             </div>
             <div class="card-content">
               <div class="service-description">
-                多云CDN提供内容分发、流量调度、统一运维，一站式管理流量接入、分发、加速、监控、诊断，提升管理效率，优化网站性能，提供优质用户体验。
+                <!-- 有描述文本的显示描述 -->
+                <template v-if="service.description">
+                  {{ service.description }}
+                </template>
+                <!-- 有特性列表的显示列表 -->
+                <template
+                  v-else-if="service.features && service.features.length"
+                >
+                  <ul class="service-features">
+                    <li
+                      v-for="(feature, index) in service.features"
+                      :key="index"
+                    >
+                      {{ feature }}
+                    </li>
+                  </ul>
+                </template>
               </div>
-              <el-button type="primary" class="activate-button">开通</el-button>
-            </div>
-          </div>
-          <div class="service-card-content">
-            <div class="card-header">
-              <h3 class="card-title">Web应用防火墙</h3>
-            </div>
-            <div class="card-content">
-              <div class="service-description">
-                Web应用防火墙（WAF）为Web网站提供一站式应用安全解决方案，包括漏洞防护、访问控制、BOT管理等。
-              </div>
-              <el-button type="primary" class="activate-button">开通</el-button>
-            </div>
-          </div>
-          <div class="service-card-content">
-            <div class="card-header">
-              <h3 class="card-title">DDos防护</h3>
-            </div>
-            <div class="card-content">
-              <div class="service-description">
-                依托海量防护带宽、多维防护算法、高效清洗系统，为游戏、互联网+、金融等易受DDoS攻击的行业用户提供专业防护服务，保障业务连续性。
-              </div>
-              <el-button type="primary" class="activate-button">开通</el-button>
-            </div>
-          </div>
-          <div class="service-card-content">
-            <div class="card-header">
-              <h3 class="card-title">云拨测</h3>
-            </div>
-            <div class="card-content">
-              <div class="service-description">
-                <ul class="service-features">
-                  <li>从用户位置发起访问测试</li>
-                  <li>主动探测，先于用户感知故障</li>
-                  <li>开箱即用，管理用户体验，评估网络服务</li>
-                </ul>
-              </div>
-              <el-button type="primary" class="activate-button">开通</el-button>
+              <el-button
+                type="primary"
+                class="activate-button"
+                @click="handleOpenService(service)"
+                :loading="service.loading"
+              >
+                {{ service.isOpen ? "立即使用" : "开通" }}
+              </el-button>
             </div>
           </div>
         </el-card>
@@ -124,17 +114,97 @@
         </el-card>
       </div>
     </div>
+    <!-- 开通指引弹窗 -->
+    <el-dialog
+      v-model="dialogVisible"
+      title="开通指引"
+      width="500px"
+      :close-on-click-modal="false"
+    >
+      <div class="guide-content">
+        <p>
+          感谢您对【{{
+            serviceName
+          }}】的关注！根据平台规范，使用本产品需先完成企业实名认证。请您联系我们的销售代表，提交企业认证资料。认证通过后，销售将第一时间为您开通产品并交付账户。
+        </p>
+      </div>
+
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="handleCancel">取消</el-button>
+          <el-button type="primary" @click="handleContactSales">
+            联系销售
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref, computed, toRaw } from "vue";
 import { useUserStore } from "@/store/modules/user";
+import { ElMessage } from "element-plus";
+import "element-plus/theme-chalk/el-message.css";
 
 const userStore = useUserStore();
+const dialogVisible = ref(false);
+const serviceName = ref("");
+// 服务数据数组
+const serviceList = ref([
+  {
+    id: 1,
+    title: "多云CDN",
+    description:
+      "多云CDN提供内容分发、流量调度、统一运维，一站式管理流量接入、分发、加速、监控、诊断，提升管理效率，优化网站性能，提供优质用户体验。",
+    features: [],
+    serviceType: "CDN",
+    isOpen: false,
+    loading: false,
+  },
+  {
+    id: 2,
+    title: "Web应用防火墙",
+    description:
+      "Web应用防火墙（WAF）为Web网站提供一站式应用安全解决方案，包括漏洞防护、访问控制、BOT管理等。",
+    features: [],
+    serviceType: "WAF",
+    isOpen: false,
+    loading: false,
+  },
+  {
+    id: 3,
+    title: "DDos防护",
+    description:
+      "依托海量防护带宽、多维防护算法、高效清洗系统，为游戏、互联网+、金融等易受DDoS攻击的行业用户提供专业防护服务，保障业务连续性。",
+    features: [],
+    serviceType: "DDOS",
+    isOpen: false,
+    loading: false,
+  },
+  {
+    id: 4,
+    title: "云拨测",
+    description: "",
+    features: [
+      "从用户位置发起访问测试",
+      "主动探测，先于用户感知故障",
+      "开箱即用，管理用户体验，评估网络服务",
+    ],
+    serviceType: "CLOUD_TEST",
+    isOpen: false,
+    loading: false,
+  },
+]);
+
 // 用户信息
 const userInfo = computed(() => userStore.userInfo);
 const userOrg = computed(() => userStore.userOrg);
+// 用户首字母
+const userInitial = computed(() => {
+  const username = userInfo.value.username;
+  return username.charAt(0).toUpperCase();
+});
 const goToAccountManagement = () => {
   console.log("跳转到账号管理");
   // router.push("/account-management");
@@ -143,6 +213,37 @@ const goToAccountManagement = () => {
 const goToAccessControl = () => {
   console.log("跳转到访问控制");
   // router.push("/access-control");
+};
+const handleOpenService = (service: any) => {
+  const rawService = toRaw(service);
+  serviceName.value = rawService.title;
+
+  if (rawService.serviceType === "CDN") {
+    const serviceIndex = serviceList.value.findIndex(
+      (item) => item.title === rawService.title
+    );
+    if (serviceIndex !== -1 && serviceList.value[serviceIndex]) {
+      serviceList.value[serviceIndex].loading = true;
+
+      setTimeout(() => {
+        if (serviceList.value[serviceIndex]) {
+          serviceList.value[serviceIndex].loading = false;
+          serviceList.value[serviceIndex].isOpen = true;
+        }
+      }, 1000);
+    }
+    return;
+  }
+  dialogVisible.value = true;
+};
+
+const handleContactSales = () => {
+  dialogVisible.value = false;
+  ElMessage.success("我们将在24小时内与您取得联系，请耐心等候");
+};
+
+const handleCancel = () => {
+  dialogVisible.value = false;
 };
 </script>
 
@@ -251,8 +352,8 @@ const goToAccessControl = () => {
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: #1664ff;
-      color: white;
+      background-color: #ecf2ff;
+      color: #05f;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -387,6 +488,19 @@ const goToAccessControl = () => {
       }
     }
   }
+}
+.guide-content {
+  line-height: 1.6;
+  p {
+    color: #606266;
+    margin-bottom: 24px;
+  }
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 // 响应式设计

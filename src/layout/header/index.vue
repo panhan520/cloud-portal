@@ -65,9 +65,11 @@
     </div>
 
     <div class="vce-header-right">
+      <div class="header-button-item">文档</div>
+      <div class="header-button-item">控制台</div>
       <!-- 未登录状态 -->
       <template v-if="!isLoggedIn">
-        <div @click="goToPage('/login')" class="cursor-pointer">登录</div>
+        <div @click="goToPage('/login')" class="header-button-item">登录</div>
         <div
           @click="goToPage('/register')"
           class="register-button cursor-pointer"
@@ -91,12 +93,9 @@
           </template>
           <template #dropdown>
             <div class="user-info-dropdown">
-              <div class="user-info-header">
-                {{ getVerificationStatus() }}
-              </div>
               <div class="user-info-card">
                 <div class="user-avatar">
-                  <img :src="userAvatar" alt="用户头像" />
+                  {{ userInitial }}
                 </div>
                 <div class="user-details">
                   <div class="user-name-row">
@@ -192,12 +191,9 @@ const isLoggedIn = computed(() => {
 const userInfo = computed(() => userStore.userInfo);
 const userOrg = computed(() => userStore.userOrg);
 
-// 用户头像和首字母
-const userAvatar = ref(
-  "https://api.dicebear.com/7.x/avataaars/svg?seed=yimoyangguang666"
-);
+// 用户首字母
 const userInitial = computed(() => {
-  const username = userInfo.value.username || "yimoyangguang666";
+  const username = userInfo.value.username;
   return username.charAt(0).toUpperCase();
 });
 
@@ -221,17 +217,6 @@ const handleDropdownCommand = (cmd: DropdownCommand) => {
   } else if (cmd === "logout") {
     handleLogout();
   }
-};
-
-const getVerificationStatus = () => {
-  if (!isVerified.value) {
-    return "未认证:";
-  } else if (isMainAccount.value) {
-    return "已认证 (主账号):";
-  } else if (isSubAccount.value) {
-    return "已认证 (子账号):";
-  }
-  return "已认证:";
 };
 
 const goToAccountManagement = () => {
@@ -352,6 +337,7 @@ const goToPage = (path: string) => {
     flex: 1;
     display: flex;
     justify-content: center;
+    height: 32px;
 
     .search-input {
       width: 520px;
@@ -379,6 +365,10 @@ const goToPage = (path: string) => {
       text-align: center;
       -moz-transition: background 0.1s linear;
       transition: 0.1s linear;
+    }
+    .header-button-item {
+      margin: 5px;
+      cursor: pointer;
     }
     .user-wrap {
       display: inline-flex;
@@ -458,29 +448,22 @@ const goToPage = (path: string) => {
   width: 320px;
   background: white;
 
-  .user-info-header {
-    padding: 12px 16px;
-    background: #f8f9fa;
-    border-bottom: 1px solid #e9ecef;
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
-  }
-
   .user-info-card {
     padding: 16px;
     display: flex;
     gap: 12px;
-
     .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background-color: #ecf2ff;
+      color: #05f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 600;
       flex-shrink: 0;
-
-      img {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
     }
 
     .user-details {

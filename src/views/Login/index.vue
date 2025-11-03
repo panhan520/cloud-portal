@@ -191,17 +191,19 @@ async function handleSubmit() {
 
     try {
       let payload: LoginParams;
-      console.log("form", form.password);
-      payload = {
-        username: form.username?.trim(),
-        email: form.email?.trim(),
-        password: form.type === "account" ? form.password : form.passwordEmail,
-        type:
-          form.type === "account"
-            ? "ACCOUNT_TYPE_USERNAME"
-            : "ACCOUNT_TYPE_EMAIL",
-      };
-
+      if (form.type === "email") {
+        payload = {
+          email: form.email?.trim(),
+          password: form.passwordEmail,
+          type: "ACCOUNT_TYPE_EMAIL",
+        };
+      } else {
+        payload = {
+          username: form.username?.trim(),
+          password: form.password,
+          type: "ACCOUNT_TYPE_USERNAME",
+        };
+      }
       const res: Record<string, any> = await loginApi(payload);
       const token = res.data.token;
       // 解析 jwt
