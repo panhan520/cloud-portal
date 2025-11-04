@@ -37,6 +37,16 @@ export const basicRoutes: IRouteRecordRaw[] = [
         path: "cert/:any(.*)?",
         microApp: MicroApp.WAF,
       },
+      {
+        path: "/basicInfo",
+        component: () => import("@/views/BasicInfo/index.vue"),
+        name: "BasicInfo",
+        meta: {
+          hidden: true,
+          title: "基本信息",
+          noTagsView: true,
+        },
+      },
     ],
   },
   {
