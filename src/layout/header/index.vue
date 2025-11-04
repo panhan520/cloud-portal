@@ -157,8 +157,8 @@
           <el-icon :size="18"><Grid /></el-icon>产品与服务
         </div>
         <ul class="drawer-list">
-          <li @click="goTo('/waf')">Web应用防火墙</li>
-          <li @click="goTo('/cert')">证书中心</li>
+          <li @click="goTo('/app/waf')">Web应用防火墙</li>
+          <li @click="goTo('/app/cert')">证书中心</li>
         </ul>
       </div>
     </el-drawer>

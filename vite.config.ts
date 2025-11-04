@@ -7,8 +7,9 @@ import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 
 export default defineConfig(async ({ mode }) => {
+  const env = loadEnv(mode, process.cwd());
   return {
-    base: (import.meta as any).env.VITE_BASE_PATH,
+    base: env.VITE_BASE_PATH,
     plugins: [
       vue(),
       vueJsxPlugin(),
@@ -27,7 +28,7 @@ export default defineConfig(async ({ mode }) => {
     server: {
       // 服务器主机名，如果允许外部访问，可设置为 "0.0.0.0" 也可设置成你的ip地址
       host: "0.0.0.0",
-      port: Number(loadEnv(mode, process.cwd())?.VITE_PORT),
+      port: Number(env?.VITE_PORT),
       open: true,
       cors: true,
       // proxy: generateMicroAppProxy(getMicroAppConfigs(loadEnv(mode, process.cwd()))),

@@ -11,19 +11,14 @@ export enum MicroApp {
 /** 子应用配置map */
 export const getMicroAppConfigs = (env: Record<string, any>) => [
   {
-    name: MicroApp.OBSERVABLE,
-    entry: env?.VITE_AVAILABILITY_URL,
-    activeRule: "/observable",
-  },
-  {
     name: MicroApp.CERT,
     entry: env?.VITE_CERT_URL,
-    activeRule: "/cert",
+    activeRule: "/app/cert",
   },
   {
     name: MicroApp.WAF,
     entry: env?.VITE_WAF_URL,
-    activeRule: "/waf",
+    activeRule: "/app/waf",
     // 启用样式隔离
     sandbox: {
       strictStyleIsolation: true, // 样式严格隔离
