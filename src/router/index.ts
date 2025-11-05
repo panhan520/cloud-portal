@@ -32,6 +32,10 @@ export const basicRoutes: IRouteRecordRaw[] = [
         path: "/app/cert/:any(.*)?",
         microApp: MicroApp.CERT,
       },
+      {
+        path: "/app/console/:any(.*)?",
+        microApp: MicroApp.CONSOLE,
+      },
     ],
   },
   {
