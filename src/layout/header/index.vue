@@ -80,7 +80,11 @@
 
       <!-- 已登录状态 -->
       <template v-else>
-        <el-dropdown @command="handleDropdownCommand" placement="bottom-end">
+        <el-dropdown
+          trigger="click"
+          @command="handleDropdownCommand"
+          placement="bottom-end"
+        >
           <template #default>
             <div class="user-wrap">
               <div class="avatar">{{ userInitial }}</div>
@@ -216,7 +220,8 @@ const handleDropdownCommand = (cmd: DropdownCommand) => {
 };
 
 const goToAccountManagement = () => {
-  router.push("/basicInfo");
+  console.log("跳转到账号管理");
+  // router.push("/account-management");
 };
 
 const goToVerification = () => {

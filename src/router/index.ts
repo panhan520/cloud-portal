@@ -25,27 +25,12 @@ export const basicRoutes: IRouteRecordRaw[] = [
         meta: { title: "首页" },
       },
       {
-        path: "/observable/:pathMatch(.*)*",
-        component: Layout, // TODO: 测试用，后续改回microApp
-        // microApp: MicroApp.OBSERVABLE,
-      },
-      {
-        path: "waf/:any(.*)*",
+        path: "/app/waf/:any(.*)*",
         microApp: MicroApp.WAF,
       },
       {
-        path: "cert/:any(.*)?",
-        microApp: MicroApp.WAF,
-      },
-      {
-        path: "/basicInfo",
-        component: () => import("@/views/BasicInfo/index.vue"),
-        name: "BasicInfo",
-        meta: {
-          hidden: true,
-          title: "基本信息",
-          noTagsView: true,
-        },
+        path: "/app/cert/:any(.*)?",
+        microApp: MicroApp.CERT,
       },
     ],
   },

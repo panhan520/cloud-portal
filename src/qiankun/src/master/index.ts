@@ -67,7 +67,7 @@ export const useMaster = (): IUseMasterRes => {
     generateMicroAppRoutes(routerConfig.basicRoutes);
     return async (app: App) => {
       const router = routerConfig.createRouter({
-        history: routerConfig.createWebHistory("/"), // 路由不使用 base，保持路径干净
+        history: routerConfig.createWebHistory("/"),
         routes: routerConfig.basicRoutes as RouteRecordRaw[],
       });
       app.use(router);
