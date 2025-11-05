@@ -1,10 +1,14 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { setToken } from "@/utils/auth";
+import { useRouter, useRoute } from "vue-router";
+import { ElMessage } from "element-plus";
 
 export const useUserStore = defineStore(
   "userState",
   () => {
+    const router = useRouter();
+    const route = useRoute();
     const userInfo = ref({
       username: "",
       email: "",
@@ -82,7 +86,20 @@ export const useUserStore = defineStore(
       localStorage.clear();
       sessionStorage.clear();
     };
-
+    /** 重置app状态，重新登录 */
+    const resetApp = async () => {
+      try {
+        localStorage.clear();
+        clearInfo();
+        ElMessage({
+          type: "success",
+          message: "token失效，已自动登出",
+        });
+        router.push({ path: "/login", query: { redirect: route.path } });
+      } catch (error: any) {
+        console.error(`登出失败，失败原因：${error}`);
+      }
+    };
     return {
       userInfo,
       userOrg,
@@ -92,6 +109,7 @@ export const useUserStore = defineStore(
       getRoles,
       getInfo,
       clearInfo,
+      resetApp,
     };
   },
   {

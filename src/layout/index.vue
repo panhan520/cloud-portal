@@ -13,19 +13,21 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
+import { useUserStore } from "@/store/modules/user";
 import { useMaster } from "@/qiankun/src/master";
 import Header from "./header/index.vue";
 import SideBar from "./sideBar";
 import { MicroApp } from "@/qiankun/src/master";
 
 const { actions, globalState } = useMaster();
+const userStore = useUserStore();
+const userInfo = computed(() => userStore.userInfo);
 
 actions.value.setGlobalState({
   ...globalState.value,
-  userInfo: {
-    name: "asdasdd",
-    age: 12,
-  },
+  userInfo: userInfo.value,
+  resetApp: userStore.resetApp,
 });
 </script>
 

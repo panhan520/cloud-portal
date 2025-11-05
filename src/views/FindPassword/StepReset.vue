@@ -198,7 +198,7 @@ async function submitForm() {
     try {
       let payload = {
         email: props.email?.trim(),
-        pwd: form.password,
+        newPwd: form.password,
         code: props.code?.trim(),
       };
       await forgetPwdApi(payload);

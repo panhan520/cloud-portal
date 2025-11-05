@@ -40,8 +40,8 @@ export default defineConfig(async ({ mode }) => {
           // 如果子应用 mock 路径不需要 /mock 前缀，可以用 rewrite
           // rewrite: (path) => path.replace(/^\/mock/, '')
         },
-        "/apis": {
-          target: "https://www.dev.wafscloud.com",
+        "/api/v1/iam": {
+          target: "https://gateway.observe.dev.eks.gainetics.io",
           changeOrigin: true,
         },
         "/user-proxy": {
