@@ -85,9 +85,17 @@ const getReqByProxyModule = ({
         return Promise.reject(new Error(resData.message || "登录已过期"));
       }
 
-      if (resData.code && resData.code !== 200 && resData.code !== 10010001) {
-        ElMessage.error(resData.message || "请求失败");
-        return Promise.reject(new Error(resData.message || "请求失败"));
+      if (resData.code && resData.code !== 200) {
+        // 检查是否是忘记密码接口且code为10010001
+        const isForgetPassword =
+          response.config.url.includes("/username/forget");
+        const isSpecialCase = isForgetPassword && resData.code === 10010001;
+
+        // 如果不是特殊情况，就提示失败
+        if (!isSpecialCase) {
+          ElMessage.error(resData.message || "请求失败");
+          return Promise.reject(new Error(resData.message || "请求失败"));
+        }
       }
       return resData;
     },
