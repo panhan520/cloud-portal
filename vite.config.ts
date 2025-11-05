@@ -33,17 +33,17 @@ export default defineConfig(async ({ mode }) => {
       cors: true,
       // proxy: generateMicroAppProxy(getMicroAppConfigs(loadEnv(mode, process.cwd()))),
       proxy: {
-        // 代理 /mock 请求到子应用 (4000 端口)
-        "/mock": {
-          target: "http://localhost:4001",
+        // 证书
+        "/apis": {
+          target: "https://www.dev.wafscloud.com",
           changeOrigin: true,
-          // 如果子应用 mock 路径不需要 /mock 前缀，可以用 rewrite
-          // rewrite: (path) => path.replace(/^\/mock/, '')
         },
+        // 控制台
         "/api/v1/iam": {
           target: "https://gateway.observe.dev.eks.gainetics.io",
           changeOrigin: true,
         },
+        // 账户相关
         "/user-proxy": {
           target: "https://gateway.observe.dev.eks.gainetics.io",
           changeOrigin: true,
