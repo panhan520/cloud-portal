@@ -48,7 +48,7 @@
       </div>
     </div>
 
-    <div class="vce-header-center">
+    <!-- <div class="vce-header-center">
       <el-input
         v-model="searchText"
         placeholder="搜索产品或文档"
@@ -62,11 +62,11 @@
           </el-icon>
         </template>
       </el-input>
-    </div>
+    </div> -->
 
     <div class="vce-header-right">
-      <div class="header-button-item">文档</div>
-      <div class="header-button-item" @click="goTo('/app/console')">控制台</div>
+      <!-- <div class="header-button-item">文档</div>
+      <div class="header-button-item" @click="goTo('/app/console')">控制台</div> -->
       <!-- 未登录状态 -->
       <template v-if="!isLoggedIn">
         <div @click="goToPage('/login')" class="header-button-item">登录</div>

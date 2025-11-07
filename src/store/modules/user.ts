@@ -12,6 +12,7 @@ export const useUserStore = defineStore(
     const userInfo = ref({
       username: "",
       email: "",
+      accountType: "",
     });
     const userOrg = ref({
       userId: "",
@@ -46,12 +47,18 @@ export const useUserStore = defineStore(
     //     return Promise.reject(error)
     //   }
     // }
-    const setLoginInfo = (token: string, uid: string, decoded: any) => {
+    const setLoginInfo = (
+      token: string,
+      uid: string,
+      decoded: any,
+      accountType: string
+    ) => {
       setToken(token);
       userOrg.value.tenantId = decoded.tenantId;
       userOrg.value.orgId = decoded.orgId;
       userOrg.value.userId = uid;
       userInfo.value.username = decoded.username;
+      userInfo.value.accountType = accountType;
 
       // 调试信息
       console.log("setLoginInfo 调用后，userInfo:", userInfo.value);

@@ -29,7 +29,9 @@
             <div class="account-info">
               <div class="account-avatar">{{ userInitial }}</div>
               <div class="account-details">
-                <div class="account-badge">主账号</div>
+                <div class="account-badge">
+                  {{ userInfo.accountType === "MASTER" ? "主账号" : "子账号" }}
+                </div>
                 <div class="account-name">{{ userInfo.username }}</div>
                 <div class="account-id">ID: {{ userOrg.userId }}</div>
                 <div class="verification-status">
@@ -43,11 +45,11 @@
       </div>
 
       <!-- 第二行 -->
-      <div class="content-row">
-        <el-card class="content-card service-card">
+      <div>
+        <el-card class="content-card service-card" v-loading="loading">
           <div
             v-for="service in serviceList"
-            :key="service.id"
+            :key="service.product"
             class="service-card-content"
           >
             <div class="card-header">
@@ -55,23 +57,7 @@
             </div>
             <div class="card-content">
               <div class="service-description">
-                <!-- 有描述文本的显示描述 -->
-                <template v-if="service.description">
-                  {{ service.description }}
-                </template>
-                <!-- 有特性列表的显示列表 -->
-                <template
-                  v-else-if="service.features && service.features.length"
-                >
-                  <ul class="service-features">
-                    <li
-                      v-for="(feature, index) in service.features"
-                      :key="index"
-                    >
-                      {{ feature }}
-                    </li>
-                  </ul>
-                </template>
+                {{ service.desc }}
               </div>
               <el-button
                 type="primary"
@@ -79,13 +65,17 @@
                 @click="handleOpenService(service)"
                 :loading="service.loading"
               >
-                {{ service.isOpen ? "立即使用" : "开通" }}
+                {{
+                  service.status === "PRODUCT_STATUS_ACTIVE"
+                    ? "立即使用"
+                    : "开通"
+                }}
               </el-button>
             </div>
           </div>
         </el-card>
 
-        <el-card class="content-card access-control">
+        <!-- <el-card class="content-card access-control">
           <div class="card-header">
             <h3 class="card-title">访问控制</h3>
             <span class="access-control-link" @click="goToAccessControl"
@@ -111,7 +101,7 @@
               </div>
             </div>
           </div>
-        </el-card>
+        </el-card> -->
       </div>
     </div>
     <!-- 开通指引弹窗 -->
@@ -124,7 +114,7 @@
       <div class="guide-content">
         <p>
           感谢您对【{{
-            serviceName
+            currentService?.title
           }}】的关注！根据平台规范，使用本产品需先完成企业实名认证。请您联系我们的销售代表，提交企业认证资料。认证通过后，销售将第一时间为您开通产品并交付账户。
         </p>
       </div>
@@ -132,7 +122,11 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="handleCancel">取消</el-button>
-          <el-button type="primary" @click="handleContactSales">
+          <el-button
+            type="primary"
+            @click="handleContactSales"
+            :loading="loadingSales"
+          >
             联系销售
           </el-button>
         </span>
@@ -142,60 +136,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, toRaw } from "vue";
+import { ref, computed, toRaw, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { useUserStore } from "@/store/modules/user";
 import { ElMessage } from "element-plus";
 import "element-plus/theme-chalk/el-message.css";
+import {
+  getCloudProductsApi,
+  openCloudProductsApi,
+  inquiriesSalesApi,
+} from "@/api/home/index";
 
 const userStore = useUserStore();
+const router = useRouter();
 const dialogVisible = ref(false);
-const serviceName = ref("");
-// 服务数据数组
-const serviceList = ref([
-  {
-    id: 1,
-    title: "多云CDN",
-    description:
-      "多云CDN提供内容分发、流量调度、统一运维，一站式管理流量接入、分发、加速、监控、诊断，提升管理效率，优化网站性能，提供优质用户体验。",
-    features: [],
-    serviceType: "CDN",
-    isOpen: false,
-    loading: false,
-  },
-  {
-    id: 2,
-    title: "Web应用防火墙",
-    description:
-      "Web应用防火墙（WAF）为Web网站提供一站式应用安全解决方案，包括漏洞防护、访问控制、BOT管理等。",
-    features: [],
-    serviceType: "WAF",
-    isOpen: false,
-    loading: false,
-  },
-  {
-    id: 3,
-    title: "DDos防护",
-    description:
-      "依托海量防护带宽、多维防护算法、高效清洗系统，为游戏、互联网+、金融等易受DDoS攻击的行业用户提供专业防护服务，保障业务连续性。",
-    features: [],
-    serviceType: "DDOS",
-    isOpen: false,
-    loading: false,
-  },
-  {
-    id: 4,
-    title: "云拨测",
-    description: "",
-    features: [
-      "从用户位置发起访问测试",
-      "主动探测，先于用户感知故障",
-      "开箱即用，管理用户体验，评估网络服务",
-    ],
-    serviceType: "CLOUD_TEST",
-    isOpen: false,
-    loading: false,
-  },
-]);
+const currentService = ref<ServiceItem | null>(null);
+
+// 产品数据数组
+const serviceList = ref<ServiceItem[]>([]);
+const loading = ref(false);
+const loadingSales = ref(false);
 
 // 用户信息
 const userInfo = computed(() => userStore.userInfo);
@@ -205,41 +165,81 @@ const userInitial = computed(() => {
   const username = userInfo.value.username;
   return username.charAt(0).toUpperCase();
 });
-const goToAccountManagement = () => {
-  console.log("跳转到账号管理");
-  // router.push("/account-management");
+interface ServiceItem {
+  product: string;
+  status: string;
+  isReady: boolean;
+  title: string;
+  desc: string;
+  loading: boolean;
+}
+onMounted(() => {
+  // getCloudProductsData();
+});
+const getCloudProductsData = async () => {
+  try {
+    loading.value = true;
+    const res = await getCloudProductsApi();
+    serviceList.value = res.data.list;
+  } finally {
+    loading.value = false;
+  }
 };
-
+const goToAccountManagement = () => {
+  router.push("/basicInfo");
+};
+const goToPage = (path: string) => {
+  router.push(path);
+};
 const goToAccessControl = () => {
   console.log("跳转到访问控制");
-  // router.push("/access-control");
 };
-const handleOpenService = (service: any) => {
+const handleOpenService = async (service: any) => {
   const rawService = toRaw(service);
-  serviceName.value = rawService.title;
-
-  if (rawService.serviceType === "CDN") {
+  currentService.value = rawService;
+  if (rawService.status === "PRODUCT_STATUS_ACTIVE") {
+    switch (rawService.product) {
+      case "CLOUD_PRODUCT_WAF":
+        goToPage("/app/waf");
+        break;
+    }
+    ElMessage.success("跳转产品");
+  } else if (rawService.isReady) {
     const serviceIndex = serviceList.value.findIndex(
-      (item) => item.title === rawService.title
+      (item) => item.product === rawService.product
     );
     if (serviceIndex !== -1 && serviceList.value[serviceIndex]) {
-      serviceList.value[serviceIndex].loading = true;
-
-      setTimeout(() => {
-        if (serviceList.value[serviceIndex]) {
-          serviceList.value[serviceIndex].loading = false;
-          serviceList.value[serviceIndex].isOpen = true;
-        }
-      }, 1000);
+      try {
+        serviceList.value[serviceIndex].loading = true;
+        await openCloudProductsApi({ product: rawService.product });
+        ElMessage.success("开通成功");
+        getCloudProductsData();
+      } finally {
+        setTimeout(() => {
+          if (serviceList.value[serviceIndex]) {
+            serviceList.value[serviceIndex].loading = false;
+          }
+        }, 1000);
+      }
     }
+  } else {
+    dialogVisible.value = true;
+  }
+};
+// 联系销售
+const handleContactSales = async () => {
+  if (!currentService.value) {
+    ElMessage.error("未选择产品");
     return;
   }
-  dialogVisible.value = true;
-};
-
-const handleContactSales = () => {
-  dialogVisible.value = false;
-  ElMessage.success("我们将在24小时内与您取得联系，请耐心等候");
+  try {
+    loadingSales.value = true;
+    await inquiriesSalesApi({ product: currentService.value.product });
+    ElMessage.success("我们将在24小时内与您取得联系，请耐心等候");
+    dialogVisible.value = false;
+  } finally {
+    loadingSales.value = false;
+  }
 };
 
 const handleCancel = () => {
@@ -407,13 +407,13 @@ const handleCancel = () => {
 // 服务卡片
 .service-card {
   .service-card-content {
-    width: 48%;
+    width: 23%;
     margin: 1%;
     display: inline-block;
     background: #f5f5f5;
     border-radius: 8px;
     padding: 15px;
-    height: 200px;
+    height: 230px;
     vertical-align: top;
     position: relative;
     .service-description {
@@ -513,6 +513,14 @@ const handleCancel = () => {
 }
 
 // 响应式设计
+@media (max-width: 1000px) {
+  .service-card {
+    .service-card-content {
+      width: 48%;
+      height: 200px;
+    }
+  }
+}
 @media (max-width: 768px) {
   .main-content {
     padding: 16px;
@@ -521,6 +529,12 @@ const handleCancel = () => {
   .content-row {
     grid-template-columns: 1fr !important;
     gap: 12px;
+  }
+  .service-card {
+    .service-card-content {
+      width: 48%;
+      height: 220px;
+    }
   }
 }
 </style>

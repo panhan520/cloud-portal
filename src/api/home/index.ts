@@ -17,5 +17,5 @@ export const openCloudProductsApi = (
 
 // 联系销售
 export const inquiriesSalesApi = (data: any): Promise<IPaginationResponse> => {
-  return userAxios.put("/apis/v1/cloud/products/sales/inquiries", data);
+  return userAxios.post("/apis/v1/cloud/products/sales/inquiries", data);
 };

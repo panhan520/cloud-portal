@@ -210,7 +210,12 @@ async function handleSubmit() {
       const decoded = jwtDecode<
         JwtPayload & { tenantId: string; orgId: string; username: string }
       >(token);
-      UserStore.setLoginInfo(token, res.data.userId, decoded);
+      UserStore.setLoginInfo(
+        token,
+        res.data.userId,
+        decoded,
+        res.data.accountType
+      );
       ElMessage.success("登录成功");
       if (res.data.needChangePwd) {
         activeStep.value = 2;

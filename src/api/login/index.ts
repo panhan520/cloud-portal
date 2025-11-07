@@ -13,7 +13,9 @@ const userAxios = getReqByProxyModule({ proxyModule: PROXY.USER });
 // 用户登录接口
 export const loginApi = (
   data: LoginParams
-): Promise<ApiResponse<{ token: string; userId: string }>> => {
+): Promise<
+  ApiResponse<{ token: string; userId: string; accountType: string }>
+> => {
   return userAxios.post("/api/v1/iam/login", data);
 };
 

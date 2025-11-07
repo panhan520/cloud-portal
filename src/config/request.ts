@@ -111,9 +111,7 @@ const getReqByProxyModule = ({
 
       const customMessage = (error?.response?.data as Record<string, any>)
         ?.message;
-      ElMessage.error(
-        `${message} ${customMessage ? `原因：${customMessage}` : ""}`
-      );
+      ElMessage.error(customMessage);
       return Promise.reject(error);
     }
   );

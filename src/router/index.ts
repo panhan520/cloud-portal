@@ -88,6 +88,16 @@ export const basicRoutes: IRouteRecordRaw[] = [
       noTagsView: true,
     },
   },
+  {
+    path: "/basicInfo",
+    component: () => import("@/views/BasicInfo/index.vue"),
+    name: "BasicInfo",
+    meta: {
+      hidden: true,
+      title: "基本信息",
+      noTagsView: true,
+    },
+  },
 
   notFoundRouter,
 ];
