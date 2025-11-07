@@ -176,7 +176,7 @@ const rules = {
   ],
   username: [
     { required: true, message: "请输入账号", trigger: "blur" },
-    { min: 5, max: 20, message: "用户名长度为6-40个字符", trigger: "blur" },
+    { min: 6, max: 20, message: "用户名长度为6-40个字符", trigger: "blur" },
   ],
   password: [{ required: true, message: "请输入密码", trigger: "blur" }],
   passwordEmail: [{ required: true, message: "请输入密码", trigger: "blur" }],

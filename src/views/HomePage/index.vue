@@ -460,6 +460,15 @@ const handleCancel = () => {
     .access-section {
       width: 28%;
       text-align: center;
+      cursor: pointer;
+      &:hover {
+        .section-title {
+          color: #1664ff;
+        }
+        .section-count {
+          color: #1664ff;
+        }
+      }
 
       .section-title {
         font-size: 14px;
