@@ -62,3 +62,10 @@ export const logoutApi = (): Promise<ApiResponse<{}>> => {
 export const pwdChangeApi = (data: any): Promise<ApiResponse<{}>> => {
   return userAxios.patch("/api/v1/iam/pwd/change", data);
 };
+
+// 获取用户信息
+export const getUserInfoApi = (
+  userId: string
+): Promise<ApiResponse<{ email: string }>> => {
+  return userAxios.get(`/api/v1/iam/info/${userId}`);
+};

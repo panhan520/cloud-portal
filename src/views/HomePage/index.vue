@@ -13,6 +13,9 @@
           <div class="card-header">
             <h3 class="card-title">最近访问</h3>
           </div>
+          <div v-for="value in getHistory()">
+            {{ value }}
+          </div>
           <div class="card-content">
             <div class="no-data">暂无数据</div>
           </div>
@@ -29,15 +32,15 @@
             <div class="account-info">
               <div class="account-avatar">{{ userInitial }}</div>
               <div class="account-details">
+                <div class="account-name">{{ userInfo.username }}</div>
+                <div class="account-id">ID: {{ userOrg.userId }}</div>
                 <div class="account-badge">
                   {{ userInfo.accountType === "MASTER" ? "主账号" : "子账号" }}
                 </div>
-                <div class="account-name">{{ userInfo.username }}</div>
-                <div class="account-id">ID: {{ userOrg.userId }}</div>
-                <div class="verification-status">
+                <!-- <div class="verification-status">
                   <span class="check-icon">✓</span>
                   <span>已实名</span>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -186,7 +189,7 @@ const getCloudProductsData = async () => {
   }
 };
 const goToAccountManagement = () => {
-  router.push("/basicInfo");
+  router.push("/account/basic-info");
 };
 const goToPage = (path: string) => {
   router.push(path);
@@ -194,16 +197,28 @@ const goToPage = (path: string) => {
 const goToAccessControl = () => {
   console.log("跳转到访问控制");
 };
+// 获取浏览历史
+function getHistory() {
+  const history = localStorage.getItem("recentlyProducts");
+  return history ? JSON.parse(history) : [];
+}
 const handleOpenService = async (service: any) => {
   const rawService = toRaw(service);
   currentService.value = rawService;
   if (rawService.status === "PRODUCT_STATUS_ACTIVE") {
+    let history = getHistory();
+    const productTitle = rawService.title;
+    // 去重：如果产品已存在，先移除
+    history = history.filter((item: string) => item !== productTitle);
+    // 添加到数组前面
+    history.unshift(productTitle);
+    // 保存到localStorage
+    localStorage.setItem("recentlyProducts", JSON.stringify(history));
     switch (rawService.product) {
       case "CLOUD_PRODUCT_WAF":
         goToPage("/app/waf");
         break;
     }
-    ElMessage.success("跳转产品");
   } else if (rawService.isReady) {
     const serviceIndex = serviceList.value.findIndex(
       (item) => item.product === rawService.product
@@ -255,7 +270,7 @@ const handleCancel = () => {
 .home-container {
   padding: 0;
   background-color: #f5f7fa;
-  min-height: 100vh;
+  min-height: calc(100vh - 48px);
 }
 
 .top-nav {
@@ -406,6 +421,7 @@ const handleCancel = () => {
 
 // 服务卡片
 .service-card {
+  min-height: 480px;
   .service-card-content {
     width: 23%;
     margin: 1%;

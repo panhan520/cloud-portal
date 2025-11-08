@@ -12,6 +12,8 @@ import { getToken, removeToken } from "@/utils/auth";
 
 import type { AxiosInstance } from "axios";
 import { useUserStore } from "@/store/modules/user";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 /** 根据模块获取请求实例 */
 const getReqByProxyModule = ({
@@ -75,13 +77,8 @@ const getReqByProxyModule = ({
         const UserStore = useUserStore();
         removeToken();
         UserStore.clearInfo();
-
-        import("@/router").then((module) => {
-          const router = module.basicRoutes; // 假设导出的是 export const router = ...
-          router.push({ path: "/login" });
-        });
-
-        ElMessage.error("登录已过期，请重新登录");
+        router.push("/login");
+        ElMessage.error(resData.message);
         return Promise.reject(new Error(resData.message || "登录已过期"));
       }
 
@@ -107,6 +104,7 @@ const getReqByProxyModule = ({
         const UserStore = useUserStore();
         removeToken();
         UserStore.clearInfo();
+        router.push("/login");
       }
 
       const customMessage = (error?.response?.data as Record<string, any>)

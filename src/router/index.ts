@@ -25,6 +25,47 @@ export const basicRoutes: IRouteRecordRaw[] = [
         meta: { title: "首页" },
       },
       {
+        path: "account",
+        component: () => import("@/layout/account/index.vue"),
+        meta: {
+          hidden: true,
+        },
+        redirect: "/account/basic-info",
+        children: [
+          {
+            path: "basic-info",
+            alias: "/basicInfo",
+            component: () => import("@/views/BasicInfo/index.vue"),
+            name: "BasicInfo",
+            meta: {
+              hidden: true,
+              title: "基本信息",
+              noTagsView: true,
+            },
+          },
+          {
+            path: "real-name",
+            component: () => import("@/views/Account/RealName/index.vue"),
+            name: "AccountRealName",
+            meta: {
+              hidden: true,
+              title: "实名认证",
+              noTagsView: true,
+            },
+          },
+          {
+            path: "security",
+            component: () => import("@/views/Account/Security/index.vue"),
+            name: "AccountSecurity",
+            meta: {
+              hidden: true,
+              title: "安全设置",
+              noTagsView: true,
+            },
+          },
+        ],
+      },
+      {
         path: "/app/waf/:any(.*)*",
         microApp: MicroApp.WAF,
       },
@@ -85,16 +126,6 @@ export const basicRoutes: IRouteRecordRaw[] = [
     meta: {
       hidden: true,
       title: "忘记密码",
-      noTagsView: true,
-    },
-  },
-  {
-    path: "/basicInfo",
-    component: () => import("@/views/BasicInfo/index.vue"),
-    name: "BasicInfo",
-    meta: {
-      hidden: true,
-      title: "基本信息",
       noTagsView: true,
     },
   },

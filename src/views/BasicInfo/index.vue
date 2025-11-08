@@ -12,17 +12,14 @@
               <span class="username">{{ userInfo.username }}</span>
             </div>
             <div class="account-id">账号ID: {{ userOrg.userId }}</div>
-            <div class="account-id">邮箱: {{ userInfo.email }}</div>
+            <div class="account-id">邮箱: {{ email }}</div>
             <div class="user-actions">
-              <div v-if="!isVerified" class="verify-action">完成实名认证 ></div>
-              <div v-else class="account-badges">
-                <span class="badge main-account" v-if="isMainAccount"
-                  >主账号</span
-                >
-                <span class="badge sub-account" v-if="isSubAccount"
-                  >子账号</span
-                >
-                <span class="badge enterprise-verify"> 企业认证 > </span>
+              <!-- <div v-if="!isVerified" class="verify-action">完成实名认证 ></div> -->
+              <div class="account-badges">
+                <span class="badge main-account">{{
+                  userInfo.accountType === "MASTER" ? "主账号" : "子账号"
+                }}</span>
+                <!-- <span class="badge enterprise-verify"> 企业认证 > </span> -->
               </div>
             </div>
           </div>
@@ -33,25 +30,31 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useUserStore } from "@/store/modules/user";
+import { getUserInfoApi } from "@/api/login";
 const userStore = useUserStore();
-const isMainAccount = ref(true); // 可以根据实际需求调整
-const isSubAccount = ref(false); // 可以根据实际需求调整
 // 用户信息
 const userInfo = computed(() => userStore.userInfo);
 const userOrg = computed(() => userStore.userOrg);
-const isVerified = ref(true);
+// const isVerified = ref(true);
+const email = ref("");
 // 用户首字母
 const userInitial = computed(() => {
   const username = userInfo.value.username;
   return username.charAt(0).toUpperCase();
 });
+onMounted(() => {
+  getUserInfoData();
+});
+const getUserInfoData = async () => {
+  const res = await getUserInfoApi(userOrg.value.userId);
+  email.value = res.data.email;
+};
 </script>
 
 <style lang="less" scoped>
 .user-info-container {
-  padding: 20px;
   .user-info-title {
     padding: 0 20px 20px 20px;
     border-bottom: solid 1px #e0e0e0;
@@ -112,7 +115,7 @@ const userInitial = computed(() => {
         .account-id {
           font-size: 12px;
           color: #999;
-          margin-bottom: 12px;
+          margin: 8px 0;
         }
 
         .user-actions {
@@ -137,13 +140,17 @@ const userInitial = computed(() => {
               padding: 4px 8px;
               border-radius: 4px;
               font-size: 12px;
-              border: 1px solid #e0e0e0;
-              background: #f5f5f5;
               color: #666;
               cursor: pointer;
 
-              &.main-account,
-              &.sub-account {
+              &.main-account {
+                display: inline-block;
+                background: #1664ff;
+                color: white;
+                font-size: 12px;
+                padding: 2px 6px;
+                border-radius: 4px;
+                margin-bottom: 8px;
                 cursor: default;
               }
 

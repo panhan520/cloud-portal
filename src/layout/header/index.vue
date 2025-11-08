@@ -81,7 +81,7 @@
       <!-- 已登录状态 -->
       <template v-else>
         <el-dropdown
-          trigger="click"
+          trigger="hover"
           @command="handleDropdownCommand"
           placement="bottom-end"
         >
@@ -108,26 +108,23 @@
                   </div>
                   <div class="account-id">账号ID: {{ userOrg.userId }}</div>
                   <div class="user-actions">
-                    <div
+                    <!-- <div
                       v-if="!isVerified"
                       class="verify-action"
                       @click="goToVerification"
                     >
                       完成实名认证 >
-                    </div>
-                    <div v-else class="account-badges">
-                      <span class="badge main-account" v-if="isMainAccount"
-                        >主账号</span
-                      >
-                      <span class="badge sub-account" v-if="isSubAccount"
-                        >子账号</span
-                      >
-                      <span
+                    </div> -->
+                    <div class="account-badges">
+                      <span class="badge main-account">{{
+                        userInfo.accountType === "MASTER" ? "主账号" : "子账号"
+                      }}</span>
+                      <!-- <span
                         class="badge enterprise-verify"
                         @click="goToEnterpriseVerification"
                       >
                         企业认证 >
-                      </span>
+                      </span> -->
                     </div>
                   </div>
                   <div
@@ -220,18 +217,15 @@ const handleDropdownCommand = (cmd: DropdownCommand) => {
 };
 
 const goToAccountManagement = () => {
-  console.log("跳转到账号管理");
-  // router.push("/account-management");
+  router.push("/account/basic-info");
 };
 
 const goToVerification = () => {
-  console.log("跳转到实名认证");
-  // router.push("/verification");
+  router.push("/account/real-name");
 };
 
 const goToEnterpriseVerification = () => {
-  console.log("跳转到企业认证");
-  // router.push("/enterprise-verification");
+  router.push("/account/security");
 };
 
 const handleLogout = async () => {
@@ -520,13 +514,17 @@ const goToPage = (path: string) => {
             padding: 4px 8px;
             border-radius: 4px;
             font-size: 12px;
-            border: 1px solid #e0e0e0;
-            background: #f5f5f5;
             color: #666;
             cursor: pointer;
 
-            &.main-account,
-            &.sub-account {
+            &.main-account {
+              display: inline-block;
+              background: #1664ff;
+              color: white;
+              font-size: 12px;
+              padding: 2px 6px;
+              border-radius: 4px;
+              margin-bottom: 8px;
               cursor: default;
             }
 
