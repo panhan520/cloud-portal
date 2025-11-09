@@ -4,7 +4,6 @@
     <div class="top-nav">
       <div class="nav-tab active">概览</div>
     </div>
-
     <!-- 主要内容区域 -->
     <div class="main-content">
       <!-- 第一行 -->
@@ -13,10 +12,16 @@
           <div class="card-header">
             <h3 class="card-title">最近访问</h3>
           </div>
-          <div v-for="value in getHistory()">
-            {{ value }}
-          </div>
-          <div class="card-content">
+          <template v-if="historyList.length > 0">
+            <div
+              class="product-content"
+              v-for="value in historyList"
+              :key="value"
+            >
+              {{ value }}
+            </div>
+          </template>
+          <div v-else class="card-content">
             <div class="no-data">暂无数据</div>
           </div>
         </el-card>
@@ -46,9 +51,8 @@
           </div>
         </el-card>
       </div>
-
       <!-- 第二行 -->
-      <div>
+      <div class="content-second-row">
         <el-card class="content-card service-card" v-loading="loading">
           <div
             v-for="service in serviceList"
@@ -77,7 +81,6 @@
             </div>
           </div>
         </el-card>
-
         <!-- <el-card class="content-card access-control">
           <div class="card-header">
             <h3 class="card-title">访问控制</h3>
@@ -168,6 +171,8 @@ const userInitial = computed(() => {
   const username = userInfo.value.username;
   return username.charAt(0).toUpperCase();
 });
+// 获取浏览历史（改为响应式）
+const historyList = ref<string[]>([]);
 interface ServiceItem {
   product: string;
   status: string;
@@ -177,7 +182,8 @@ interface ServiceItem {
   loading: boolean;
 }
 onMounted(() => {
-  // getCloudProductsData();
+  getCloudProductsData();
+  loadHistory();
 });
 const getCloudProductsData = async () => {
   try {
@@ -197,23 +203,24 @@ const goToPage = (path: string) => {
 const goToAccessControl = () => {
   console.log("跳转到访问控制");
 };
-// 获取浏览历史
-function getHistory() {
+// 初始化历史
+const loadHistory = () => {
   const history = localStorage.getItem("recentlyProducts");
-  return history ? JSON.parse(history) : [];
-}
+  historyList.value = history ? JSON.parse(history) : [];
+};
 const handleOpenService = async (service: any) => {
   const rawService = toRaw(service);
   currentService.value = rawService;
   if (rawService.status === "PRODUCT_STATUS_ACTIVE") {
-    let history = getHistory();
+    let history = getHistoryFromLocal();
     const productTitle = rawService.title;
-    // 去重：如果产品已存在，先移除
+    // 去重
     history = history.filter((item: string) => item !== productTitle);
-    // 添加到数组前面
     history.unshift(productTitle);
-    // 保存到localStorage
+    // 保存到 localStorage
     localStorage.setItem("recentlyProducts", JSON.stringify(history));
+    // 同步更新响应式变量
+    historyList.value = history;
     switch (rawService.product) {
       case "CLOUD_PRODUCT_WAF":
         goToPage("/app/waf");
@@ -240,6 +247,10 @@ const handleOpenService = async (service: any) => {
   } else {
     dialogVisible.value = true;
   }
+};
+const getHistoryFromLocal = () => {
+  const history = localStorage.getItem("recentlyProducts");
+  return history ? JSON.parse(history) : [];
 };
 // 联系销售
 const handleContactSales = async () => {
@@ -271,6 +282,8 @@ const handleCancel = () => {
   padding: 0;
   background-color: #f5f7fa;
   min-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
 }
 
 .top-nav {
@@ -296,6 +309,13 @@ const handleCancel = () => {
 
 .main-content {
   padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  .content-second-row {
+    flex: 1;
+    display: flex;
+  }
 }
 
 .content-row {
@@ -353,6 +373,19 @@ const handleCancel = () => {
       color: #999;
       font-size: 14px;
       padding: 20px 0;
+    }
+  }
+  .product-content {
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border: 1px solid rgba(234, 237, 241, 0.8);
+    border-radius: 4px;
+    margin-right: 8px;
+    cursor: pointer;
+    display: inline-block;
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      color: #1664ff;
     }
   }
 }
@@ -421,7 +454,7 @@ const handleCancel = () => {
 
 // 服务卡片
 .service-card {
-  min-height: 480px;
+  flex: 1;
   .service-card-content {
     width: 23%;
     margin: 1%;
