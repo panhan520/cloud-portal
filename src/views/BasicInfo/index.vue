@@ -11,8 +11,6 @@
             <div class="user-name-row">
               <span class="username">{{ userInfo.username }}</span>
             </div>
-            <div class="account-id">账号ID: {{ userOrg.userId }}</div>
-            <div class="account-id">邮箱: {{ email }}</div>
             <div class="user-actions">
               <!-- <div v-if="!isVerified" class="verify-action">完成实名认证 ></div> -->
               <div class="account-badges">
@@ -22,6 +20,8 @@
                 <!-- <span class="badge enterprise-verify"> 企业认证 > </span> -->
               </div>
             </div>
+            <div class="account-id">账号ID: {{ userOrg.userId }}</div>
+            <div class="account-id">邮箱: {{ email }}</div>
           </div>
         </div>
       </div>
@@ -119,7 +119,7 @@ const getUserInfoData = async () => {
         }
 
         .user-actions {
-          margin-bottom: 16px;
+          margin-bottom: 10px;
 
           .verify-action {
             font-size: 14px;
@@ -150,7 +150,6 @@ const getUserInfoData = async () => {
                 font-size: 12px;
                 padding: 2px 6px;
                 border-radius: 4px;
-                margin-bottom: 8px;
                 cursor: default;
               }
 

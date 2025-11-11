@@ -67,6 +67,7 @@
     <div class="vce-header-right">
       <!-- <div class="header-button-item">文档</div>
       <div class="header-button-item" @click="goTo('/app/console')">控制台</div> -->
+      <div class="header-button-item" @click="goTo('/home')">总览</div>
       <!-- 未登录状态 -->
       <template v-if="!isLoggedIn">
         <div @click="goToPage('/login')" class="header-button-item">登录</div>
@@ -522,7 +523,6 @@ const goToPage = (path: string) => {
               font-size: 12px;
               padding: 2px 6px;
               border-radius: 4px;
-              margin-bottom: 8px;
               cursor: default;
             }
 

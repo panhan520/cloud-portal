@@ -90,11 +90,11 @@
               </el-form-item>
             </template>
 
-            <div class="login-line">
+            <!-- <div class="login-line">
               登录视为您已阅读并同意GAINETICS<span>用户协议</span>和<span
                 >隐私政策</span
               >
-            </div>
+            </div> -->
 
             <el-form-item>
               <el-button

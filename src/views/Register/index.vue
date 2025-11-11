@@ -132,13 +132,13 @@
               </el-button>
             </div>
           </el-form-item>
-          <div class="login-line">
+          <!-- <div class="login-line">
             <el-checkbox v-model="form.agree" size="large"
               >我已阅读并同意GAINETICS<span>用户协议</span>和<span
                 >隐私政策</span
               ></el-checkbox
             >
-          </div>
+          </div> -->
 
           <el-form-item class="login-btn">
             <el-button
@@ -146,7 +146,6 @@
               :loading="loading"
               style="width: 100%"
               @click="handleSubmit"
-              :disabled="form.agree === false"
               >注册</el-button
             >
           </el-form-item>
@@ -199,7 +198,7 @@ const form = reactive({
   password: "",
   rePassword: "",
   code: "",
-  agree: false,
+  // agree: false,
 });
 
 // 正则
