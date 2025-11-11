@@ -200,9 +200,9 @@ const goToAccountManagement = () => {
 const goToPage = (path: string) => {
   router.push(path);
 };
-const goToAccessControl = () => {
-  console.log("跳转到访问控制");
-};
+// const goToAccessControl = () => {
+//   console.log("跳转到访问控制");
+// };
 // 初始化历史
 const loadHistory = () => {
   const history = localStorage.getItem("recentlyProducts");

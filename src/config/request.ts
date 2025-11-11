@@ -98,7 +98,6 @@ const getReqByProxyModule = ({
     },
     async (error: AxiosError) => {
       const status = error.response?.status || 500;
-      const message = errorCodeType(status);
 
       if (status === 401 || status === 403) {
         const UserStore = useUserStore();

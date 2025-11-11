@@ -165,7 +165,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { Search, Grid } from "@element-plus/icons-vue";
+import { Grid } from "@element-plus/icons-vue";
 import { useUserStore } from "@/store/modules/user";
 import { getToken } from "@/utils/auth";
 import logo from "@/assets/svgs/logo.svg";
@@ -175,7 +175,7 @@ type DropdownCommand = string | number | Record<string, any>;
 
 const router = useRouter();
 const userStore = useUserStore();
-const searchText = ref("");
+// const searchText = ref("");
 const drawerVisible = ref(false);
 const loading = ref(false);
 
@@ -195,9 +195,7 @@ const userInitial = computed(() => {
 });
 
 // 认证状态（模拟数据，实际应该从后端获取）
-const isVerified = ref(true); // 可以根据实际需求调整
-const isMainAccount = ref(true); // 可以根据实际需求调整
-const isSubAccount = ref(false); // 可以根据实际需求调整
+// const isVerified = ref(true); // 可以根据实际需求调整
 
 const toggleDrawer = () => {
   console.log("toggleDrawer", drawerVisible.value);
@@ -220,13 +218,13 @@ const goToAccountManagement = () => {
   router.push("/account/basic-info");
 };
 
-const goToVerification = () => {
-  router.push("/account/real-name");
-};
+// const goToVerification = () => {
+//   router.push("/account/real-name");
+// };
 
-const goToEnterpriseVerification = () => {
-  router.push("/account/security");
-};
+// const goToEnterpriseVerification = () => {
+//   router.push("/account/security");
+// };
 
 const handleLogout = async () => {
   loading.value = true;
@@ -247,9 +245,9 @@ const goTo = (path: string) => {
   }
 };
 
-const onSearch = () => {
-  router.push({ path: "/search", query: { q: searchText.value } });
-};
+// const onSearch = () => {
+//   router.push({ path: "/search", query: { q: searchText.value } });
+// };
 
 const goToPage = (path: string) => {
   router.push({ path });
