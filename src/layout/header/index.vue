@@ -44,7 +44,7 @@
       <!-- Logo -->
       <div class="vce-logo" @click="goTo('/')" role="button">
         <img :src="logo" alt="" class="logo-img" />
-        <span class="logo-text">GAINETICS</span>
+        <span class="logo-text">星云</span>
       </div>
     </div>
 
@@ -67,7 +67,7 @@
     <div class="vce-header-right">
       <!-- <div class="header-button-item">文档</div>
       <div class="header-button-item" @click="goTo('/app/console')">控制台</div> -->
-      <div class="header-button-item" @click="goTo('/home')">总览</div>
+      <div class="header-button-item" @click="goTo('/home')">概览</div>
       <!-- 未登录状态 -->
       <template v-if="!isLoggedIn">
         <div @click="goToPage('/login')" class="header-button-item">登录</div>

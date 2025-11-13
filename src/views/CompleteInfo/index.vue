@@ -2,7 +2,7 @@
   <div class="login-wrap">
     <div class="logo-top" @click="goTo('/')">
       <img :src="logo" alt="logo" />
-      GAINETICS
+      星云
     </div>
     <!-- 左侧 -->
     <div class="promo">

@@ -3,7 +3,7 @@
     <div class="login-wrap" v-if="activeStep === 1">
       <div class="logo-top" @click="goTo('/')">
         <img :src="logo" alt="logo" />
-        GAINETICS
+        星云
       </div>
       <!-- 左侧 -->
       <div class="promo">
@@ -13,7 +13,7 @@
       <!-- 右侧登录卡片 -->
       <div class="login-card">
         <el-card class="card-body">
-          <div class="title">登录GAINETICS账号</div>
+          <div class="title">登录星云账号</div>
 
           <el-tabs v-model="form.type" class="login-tabs">
             <el-tab-pane label="邮箱登录" name="email" />
@@ -91,7 +91,7 @@
             </template>
 
             <!-- <div class="login-line">
-              登录视为您已阅读并同意GAINETICS<span>用户协议</span>和<span
+              登录视为您已阅读并同意星云<span>用户协议</span>和<span
                 >隐私政策</span
               >
             </div> -->

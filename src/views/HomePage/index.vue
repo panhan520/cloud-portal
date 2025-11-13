@@ -16,9 +16,10 @@
             <div
               class="product-content"
               v-for="value in historyList"
-              :key="value"
+              :key="value.name"
             >
-              {{ value }}
+              <i :class="value.icon"></i>
+              {{ value.name }}
             </div>
           </template>
           <div v-else class="card-content">
@@ -68,7 +69,10 @@
               </div>
               <el-button
                 type="primary"
-                class="activate-button"
+                :class="{
+                  'activate-button': true,
+                  'used-button': service.status === 'PRODUCT_STATUS_ACTIVE',
+                }"
                 @click="handleOpenService(service)"
                 :loading="service.loading"
               >
@@ -152,7 +156,6 @@ import {
   openCloudProductsApi,
   inquiriesSalesApi,
 } from "@/api/home/index";
-
 const userStore = useUserStore();
 const router = useRouter();
 const dialogVisible = ref(false);
@@ -172,7 +175,11 @@ const userInitial = computed(() => {
   return username.charAt(0).toUpperCase();
 });
 // 获取浏览历史（改为响应式）
-const historyList = ref<string[]>([]);
+interface HistoryItem {
+  name: string;
+  icon: string;
+}
+const historyList = ref<HistoryItem[]>([]);
 interface ServiceItem {
   product: string;
   status: string;
@@ -215,8 +222,26 @@ const handleOpenService = async (service: any) => {
     let history = getHistoryFromLocal();
     const productTitle = rawService.title;
     // 去重
-    history = history.filter((item: string) => item !== productTitle);
-    history.unshift(productTitle);
+    history = history.filter((item: HistoryItem) => item.name !== productTitle);
+    let icon = "";
+    switch (rawService.product) {
+      case "CLOUD_PRODUCT_WAF":
+        icon = "fa-solid fa-table-cells-column-lock";
+        break;
+      case "CLOUD_PRODUCT_CDN":
+        icon = "fa-solid fa-diagram-project";
+        break;
+      case "CLOUD_PRODUCT_DDOS":
+        icon = "fa-solid fa-user-shield";
+        break;
+      case "CLOUD_PRODUCT_PROBE":
+        icon = "fa-solid fa-cloud-arrow-up";
+        break;
+    }
+
+    // 添加到开头并限制最多8个
+    history = [{ name: productTitle, icon }, ...history].slice(0, 8);
+
     // 保存到 localStorage
     localStorage.setItem("recentlyProducts", JSON.stringify(history));
     // 同步更新响应式变量
@@ -324,7 +349,7 @@ const handleCancel = () => {
   margin-bottom: 16px;
 
   &:first-child {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
   }
 
   &:nth-child(2) {
@@ -376,16 +401,22 @@ const handleCancel = () => {
     }
   }
   .product-content {
+    width: calc(25% - 8px);
     padding: 8px 12px;
+    margin-bottom: 8px;
     box-sizing: border-box;
     border: 1px solid rgba(234, 237, 241, 0.8);
     border-radius: 4px;
-    margin-right: 8px;
+    margin-right: 1%;
     cursor: pointer;
     display: inline-block;
     &:hover {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       color: #1664ff;
+    }
+    i {
+      color: #1664ff;
+      margin-right: 5px;
     }
   }
 }
@@ -495,6 +526,15 @@ const handleCancel = () => {
     &:hover {
       background: #0e4dcc;
       border-color: #0e4dcc;
+    }
+  }
+  .used-button {
+    background: #ffffff;
+    color: #333;
+    border-color: #ffffff;
+    &:hover {
+      background: #ffffff;
+      border-color: #ffffff;
     }
   }
 }

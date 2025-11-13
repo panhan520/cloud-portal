@@ -8,6 +8,7 @@ import { basicRoutes } from "./router";
 import App from "./App";
 // 引入全局样式
 import "@/styles/index.less";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 import type { App as IApp } from "vue";
 

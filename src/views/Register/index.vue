@@ -2,7 +2,7 @@
   <div class="register-wrap">
     <div class="logo-top" @click="goTo('/')">
       <img :src="logo" alt="logo" />
-      GAINETICS
+      星云
     </div>
     <!-- 左侧 -->
     <div class="promo">
@@ -12,7 +12,7 @@
     <!-- 右侧登录卡片 -->
     <div class="login-card">
       <el-card class="card-body">
-        <div class="title">注册GAINETICS账号</div>
+        <div class="title">注册星云账号</div>
         <el-form
           ref="formRef"
           :model="form"
@@ -134,7 +134,7 @@
           </el-form-item>
           <!-- <div class="login-line">
             <el-checkbox v-model="form.agree" size="large"
-              >我已阅读并同意GAINETICS<span>用户协议</span>和<span
+              >我已阅读并同意星云<span>用户协议</span>和<span
                 >隐私政策</span
               ></el-checkbox
             >
