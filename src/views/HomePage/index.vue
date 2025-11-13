@@ -401,7 +401,7 @@ const handleCancel = () => {
     }
   }
   .product-content {
-    width: calc(25% - 8px);
+    width: 23%;
     padding: 8px 12px;
     margin-bottom: 8px;
     box-sizing: border-box;
