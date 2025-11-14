@@ -5,15 +5,16 @@ import axios, {
 } from "axios";
 import { ElMessage } from "element-plus";
 import qs from "qs";
-import { errorCodeType } from "../api/errorCodeType";
+// import { errorCodeType } from "../api/errorCodeType";
 import { PROXY } from "./constants";
 import { filterEmptyParams } from "./utils.ts";
 import { getToken, removeToken } from "@/utils/auth";
 
 import type { AxiosInstance } from "axios";
 import { useUserStore } from "@/store/modules/user";
-import { useRouter } from "vue-router";
-const router = useRouter();
+function getRouter() {
+  return window.__MICRO_ROUTER__;
+}
 
 /** 根据模块获取请求实例 */
 const getReqByProxyModule = ({
@@ -77,7 +78,8 @@ const getReqByProxyModule = ({
         const UserStore = useUserStore();
         removeToken();
         UserStore.clearInfo();
-        router.push("/login");
+        const router = getRouter();
+        router?.push("/login");
         ElMessage.error(resData.message);
         return Promise.reject(new Error(resData.message || "登录已过期"));
       }
@@ -103,7 +105,8 @@ const getReqByProxyModule = ({
         const UserStore = useUserStore();
         removeToken();
         UserStore.clearInfo();
-        router.push("/login");
+        const router = getRouter();
+        router?.push("/login");
       }
 
       const customMessage = (error?.response?.data as Record<string, any>)

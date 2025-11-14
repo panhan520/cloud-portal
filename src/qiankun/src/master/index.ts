@@ -31,7 +31,11 @@ import type {
 
 /** 单例存储 */
 let masterConfigCache: IUseMasterRes | null = null;
-
+declare global {
+  interface Window {
+    __MICRO_ROUTER__?: any;
+  }
+}
 export { default as MicroApp } from "./microApp";
 /** 初始化基座 */
 export const useMaster = (): IUseMasterRes => {
@@ -71,6 +75,8 @@ export const useMaster = (): IUseMasterRes => {
         routes: routerConfig.basicRoutes as RouteRecordRaw[],
       });
       app.use(router);
+      // 给全局挂载
+      window.__MICRO_ROUTER__ = router;
     };
   };
   /** 初始化全局数据 */
