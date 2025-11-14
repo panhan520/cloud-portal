@@ -17,6 +17,7 @@
               class="product-content"
               v-for="value in historyList"
               :key="value.name"
+              @click="goToProduct(value)"
             >
               <i :class="value.icon"></i>
               {{ value.name }}
@@ -146,8 +147,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, toRaw, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { ref, computed, toRaw, onMounted, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { useUserStore } from "@/store/modules/user";
 import { ElMessage } from "element-plus";
 import "element-plus/theme-chalk/el-message.css";
@@ -158,6 +159,7 @@ import {
 } from "@/api/home/index";
 const userStore = useUserStore();
 const router = useRouter();
+const route = useRoute();
 const dialogVisible = ref(false);
 const currentService = ref<ServiceItem | null>(null);
 
@@ -178,6 +180,7 @@ const userInitial = computed(() => {
 interface HistoryItem {
   name: string;
   icon: string;
+  product: string;
 }
 const historyList = ref<HistoryItem[]>([]);
 interface ServiceItem {
@@ -192,6 +195,13 @@ onMounted(() => {
   getCloudProductsData();
   loadHistory();
 });
+// 监听路由变化
+watch(
+  () => route.fullPath,
+  () => {
+    loadHistory();
+  }
+);
 const getCloudProductsData = async () => {
   try {
     loading.value = true;
@@ -237,10 +247,16 @@ const handleOpenService = async (service: any) => {
       case "CLOUD_PRODUCT_PROBE":
         icon = "fa-solid fa-cloud-arrow-up";
         break;
+      case "CLOUD_PRODUCT_CERT":
+        icon = "fa-solid fa-file-shield";
+        break;
     }
 
     // 添加到开头并限制最多8个
-    history = [{ name: productTitle, icon }, ...history].slice(0, 8);
+    history = [
+      { name: productTitle, icon, product: rawService.product },
+      ...history,
+    ].slice(0, 8);
 
     // 保存到 localStorage
     localStorage.setItem("recentlyProducts", JSON.stringify(history));
@@ -271,6 +287,50 @@ const handleOpenService = async (service: any) => {
     }
   } else {
     dialogVisible.value = true;
+  }
+};
+const goToProduct = (service: any) => {
+  const rawService = toRaw(service);
+  let history = getHistoryFromLocal();
+  const productTitle = rawService.name;
+  // 去重
+  history = history.filter((item: HistoryItem) => item.name !== productTitle);
+  let icon = "";
+  switch (rawService.product) {
+    case "CLOUD_PRODUCT_WAF":
+      icon = "fa-solid fa-table-cells-column-lock";
+      break;
+    case "CLOUD_PRODUCT_CDN":
+      icon = "fa-solid fa-diagram-project";
+      break;
+    case "CLOUD_PRODUCT_DDOS":
+      icon = "fa-solid fa-user-shield";
+      break;
+    case "CLOUD_PRODUCT_PROBE":
+      icon = "fa-solid fa-cloud-arrow-up";
+      break;
+    case "CLOUD_PRODUCT_CERT":
+      icon = "fa-solid fa-file-shield";
+      break;
+  }
+
+  // 添加到开头并限制最多8个
+  history = [
+    { name: productTitle, icon, product: rawService.product },
+    ...history,
+  ].slice(0, 8);
+
+  // 保存到 localStorage
+  localStorage.setItem("recentlyProducts", JSON.stringify(history));
+  // 同步更新响应式变量
+  historyList.value = history;
+  switch (rawService.product) {
+    case "CLOUD_PRODUCT_WAF":
+      goToPage("/app/waf");
+      break;
+    case "CLOUD_PRODUCT_CERT":
+      goToPage("/app/cert");
+      break;
   }
 };
 const getHistoryFromLocal = () => {

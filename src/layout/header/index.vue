@@ -155,8 +155,23 @@
           <el-icon :size="18"><Grid /></el-icon>产品与服务
         </div>
         <ul class="drawer-list">
-          <li @click="goTo('/app/waf')">Web应用防火墙</li>
-          <li @click="goTo('/app/cert')">证书中心</li>
+          <li
+            @click="
+              handleService({
+                title: '证书中心',
+                product: 'CLOUD_PRODUCT_CERT',
+              })
+            "
+          >
+            证书中心
+          </li>
+          <li
+            v-for="service in serviceList"
+            :key="service.product"
+            @click="handleService(service)"
+          >
+            {{ service.title }}
+          </li>
         </ul>
       </div>
     </el-drawer>
@@ -164,13 +179,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, toRaw } from "vue";
 import { useRouter } from "vue-router";
 import { Grid } from "@element-plus/icons-vue";
 import { useUserStore } from "@/store/modules/user";
 import { getToken } from "@/utils/auth";
 import logo from "@/assets/svgs/logo.svg";
 import { logoutApi } from "@/api/login";
+import { getCloudProductsApi } from "@/api/home/index";
 
 type DropdownCommand = string | number | Record<string, any>;
 
@@ -188,7 +204,21 @@ const isLoggedIn = computed(() => {
 // 用户信息
 const userInfo = computed(() => userStore.userInfo);
 const userOrg = computed(() => userStore.userOrg);
-
+interface ServiceItem {
+  product: string;
+  status: string;
+  isReady: boolean;
+  title: string;
+  desc: string;
+  loading: boolean;
+}
+// 产品数据数组
+const serviceList = ref<ServiceItem[]>([]);
+// 获取浏览历史（改为响应式）
+interface HistoryItem {
+  name: string;
+  icon: string;
+}
 // 用户首字母
 const userInitial = computed(() => {
   const username = userInfo.value.username;
@@ -197,7 +227,63 @@ const userInitial = computed(() => {
 
 // 认证状态（模拟数据，实际应该从后端获取）
 // const isVerified = ref(true); // 可以根据实际需求调整
+onMounted(() => {
+  getCloudProductsData();
+});
+// 获取产品列表
+const getCloudProductsData = async () => {
+  const res = await getCloudProductsApi();
+  serviceList.value =
+    res.data.list?.filter((item) => item.status === "PRODUCT_STATUS_ACTIVE") ||
+    [];
+};
+const getHistoryFromLocal = () => {
+  const history = localStorage.getItem("recentlyProducts");
+  return history ? JSON.parse(history) : [];
+};
+const handleService = async (service: any) => {
+  drawerVisible.value = false;
+  const rawService = toRaw(service);
+  let history = getHistoryFromLocal();
+  const productTitle = rawService.title;
+  // 去重
+  history = history.filter((item: HistoryItem) => item.name !== productTitle);
+  let icon = "";
+  switch (rawService.product) {
+    case "CLOUD_PRODUCT_WAF":
+      icon = "fa-solid fa-table-cells-column-lock";
+      break;
+    case "CLOUD_PRODUCT_CDN":
+      icon = "fa-solid fa-diagram-project";
+      break;
+    case "CLOUD_PRODUCT_DDOS":
+      icon = "fa-solid fa-user-shield";
+      break;
+    case "CLOUD_PRODUCT_PROBE":
+      icon = "fa-solid fa-cloud-arrow-up";
+      break;
+    case "CLOUD_PRODUCT_CERT":
+      icon = "fa-solid fa-file-shield";
+      break;
+  }
 
+  // 添加到开头并限制最多8个
+  history = [
+    { name: productTitle, icon, product: rawService.product },
+    ...history,
+  ].slice(0, 8);
+
+  // 保存到 localStorage
+  localStorage.setItem("recentlyProducts", JSON.stringify(history));
+  switch (rawService.product) {
+    case "CLOUD_PRODUCT_WAF":
+      goToPage("/app/waf");
+      break;
+    case "CLOUD_PRODUCT_CERT":
+      goToPage("/app/cert");
+      break;
+  }
+};
 const toggleDrawer = () => {
   console.log("toggleDrawer", drawerVisible.value);
   drawerVisible.value = !drawerVisible.value;
