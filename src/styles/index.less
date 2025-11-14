@@ -47,26 +47,6 @@ body {
 .el-menu .el-menu-item.is-active {
   font-weight: bold;
 }
-// 表格
-.el-table--border .el-table__cell {
-  border-right: none !important;
-}
-.el-table thead th.el-table__cell {
-  background: #f6f8fa !important;
-  font-weight: 400 !important;
-  color: #42464e !important;
-}
-.el-table {
-  border-radius: 4px;
-  font-size: 13px !important;
-  margin: 20px 0;
-}
-.el-table--border .el-table__cell {
-  color: #0c0d0e !important;
-}
-.el-table .cell {
-  font-size: 12px !important;
-}
 // tab切换
 .el-tabs__item {
   background-color: #f6f8fa !important;
@@ -116,6 +96,10 @@ body {
   }
   .el-button__text {
     order: 1;
+  }
+  /* 只有图标时移除左边距 */
+  .el-icon:only-child {
+    margin-left: 0 !important;
   }
 }
 .el-button--small {
