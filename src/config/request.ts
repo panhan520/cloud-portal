@@ -86,8 +86,8 @@ const getReqByProxyModule = ({
 
       if (resData.code && resData.code !== 200) {
         // 检查是否是忘记密码接口且code为10010001
-        const isForgetPassword =
-          response.config.url.includes("/username/forget");
+        const url = response.config.url || "";
+        const isForgetPassword = url.includes("/username/forget");
         const isSpecialCase = isForgetPassword && resData.code === 10010001;
 
         // 如果不是特殊情况，就提示失败
