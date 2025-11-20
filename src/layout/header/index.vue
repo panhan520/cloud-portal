@@ -205,7 +205,7 @@ const isLoggedIn = computed(() => {
 
 // 用户信息
 const userInfo = computed(() => userStore.userInfo);
-const userOrg = computed(() => userStore.userOrg);
+// const userOrg = computed(() => userStore.userOrg);
 interface ServiceItem {
   product: string;
   status: string;
