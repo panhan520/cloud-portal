@@ -20,7 +20,7 @@
                 <!-- <span class="badge enterprise-verify"> 企业认证 > </span> -->
               </div>
             </div>
-            <div class="account-id">账号ID: {{ userOrg.userId }}</div>
+            <!-- <div class="account-id">账号ID: {{ userOrg.userId }}</div> -->
             <div class="account-id">邮箱: {{ email }}</div>
           </div>
         </div>

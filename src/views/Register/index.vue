@@ -45,7 +45,7 @@
               <template #reference>
                 <el-input
                   v-model="form.password"
-                  placeholder="设置你的登录密码"
+                  placeholder="请输入密码"
                   :type="showPassword ? 'text' : 'password'"
                   @input="checkPasswordStrength"
                   @focus="isPopoverVisible = true"
@@ -104,7 +104,7 @@
           <el-form-item prop="rePassword">
             <el-input
               v-model="form.rePassword"
-              placeholder="请再次输入你的密码"
+              placeholder="请再次输入密码"
               :type="showPasswordRe ? 'text' : 'password'"
               @keyup.enter.native="handleSubmit"
               clearable
@@ -289,7 +289,7 @@ const rules = {
         if (typeCount < 3) {
           cb(
             new Error(
-              "密码必须包含至少3种字符类型（大写字母、小写字母、数字、特殊字符）"
+              "密码必须包含至少3种字符类型(大写字母、小写字母、数字、特殊字符)"
             )
           );
           return;

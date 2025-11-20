@@ -46,6 +46,9 @@
         <img :src="logo" alt="" class="logo-img" />
         <span class="logo-text">星云</span>
       </div>
+      <div class="header-button-bg" @click="goTo('/home')">
+        <el-icon><HomeFilled /></el-icon>概览
+      </div>
     </div>
 
     <!-- <div class="vce-header-center">
@@ -67,7 +70,6 @@
     <div class="vce-header-right">
       <!-- <div class="header-button-item">文档</div>
       <div class="header-button-item" @click="goTo('/app/console')">控制台</div> -->
-      <div class="header-button-item" @click="goTo('/home')">概览</div>
       <!-- 未登录状态 -->
       <template v-if="!isLoggedIn">
         <div @click="goToPage('/login')" class="header-button-item">登录</div>
@@ -107,7 +109,7 @@
                       >账号管理 ></span
                     >
                   </div>
-                  <div class="account-id">账号ID: {{ userOrg.userId }}</div>
+                  <!-- <div class="account-id">账号ID: {{ userOrg.userId }}</div> -->
                   <div class="user-actions">
                     <!-- <div
                       v-if="!isVerified"
@@ -181,7 +183,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, toRaw } from "vue";
 import { useRouter } from "vue-router";
-import { Grid } from "@element-plus/icons-vue";
+import { Grid, HomeFilled } from "@element-plus/icons-vue";
 import { useUserStore } from "@/store/modules/user";
 import { getToken } from "@/utils/auth";
 import logo from "@/assets/svgs/logo.svg";
@@ -408,6 +410,25 @@ const goToPage = (path: string) => {
         font-weight: 600;
         color: #111827;
         font-size: 16px;
+      }
+    }
+    .header-button-bg {
+      color: #1664ff;
+      background: #ebf1ff;
+      height: 24px;
+      line-height: 24px;
+      margin-left: 5px;
+      padding: 0 12px;
+      font-size: 13px;
+      cursor: pointer;
+      border-radius: 4px;
+      i {
+        margin-right: 4px;
+        vertical-align: middle;
+        margin-top: -3px;
+      }
+      &:hover {
+        opacity: 0.8;
       }
     }
   }

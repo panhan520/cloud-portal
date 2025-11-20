@@ -22,7 +22,7 @@
           <template #reference>
             <el-input
               v-model="form.password"
-              placeholder="设置你的登录密码"
+              placeholder="请输入你的密码"
               :type="showPassword ? 'text' : 'password'"
               @input="checkPasswordStrength"
               @focus="isPopoverVisible = true"

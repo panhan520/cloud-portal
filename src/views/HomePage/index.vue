@@ -40,7 +40,7 @@
               <div class="account-avatar">{{ userInitial }}</div>
               <div class="account-details">
                 <div class="account-name">{{ userInfo.username }}</div>
-                <div class="account-id">ID: {{ userOrg.userId }}</div>
+                <!-- <div class="account-id">ID: {{ userOrg.userId }}</div> -->
                 <div class="account-badge">
                   {{ userInfo.accountType === "MASTER" ? "主账号" : "子账号" }}
                 </div>
