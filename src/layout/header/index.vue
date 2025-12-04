@@ -267,6 +267,9 @@ const handleService = async (service: any) => {
     case "CLOUD_PRODUCT_CERT":
       icon = "fa-solid fa-file-shield";
       break;
+    case 5:
+      icon = "fa-solid fa-shield-halved";
+      break;
   }
 
   // 添加到开头并限制最多8个
@@ -284,6 +287,9 @@ const handleService = async (service: any) => {
     case "CLOUD_PRODUCT_CERT":
       goToPage("/app/cert");
       break;
+      case 5:
+        goToPage("/domain-shield/");
+        break;
   }
 };
 const toggleDrawer = () => {

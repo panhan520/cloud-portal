@@ -250,6 +250,9 @@ const handleOpenService = async (service: any) => {
       case "CLOUD_PRODUCT_CERT":
         icon = "fa-solid fa-file-shield";
         break;
+      case 5:
+        icon = "fa-solid fa-shield-halved";
+        break;
     }
 
     // 添加到开头并限制最多8个
@@ -265,6 +268,9 @@ const handleOpenService = async (service: any) => {
     switch (rawService.product) {
       case "CLOUD_PRODUCT_WAF":
         goToPage("/app/waf");
+        break;
+      case 5:
+        goToPage("/domain-shield/");
         break;
     }
   } else if (rawService.isReady) {
@@ -312,6 +318,9 @@ const goToProduct = (service: any) => {
     case "CLOUD_PRODUCT_CERT":
       icon = "fa-solid fa-file-shield";
       break;
+    case 5:
+      icon = "fa-solid fa-shield-halved";
+      break;
   }
 
   // 添加到开头并限制最多8个
@@ -331,6 +340,9 @@ const goToProduct = (service: any) => {
     case "CLOUD_PRODUCT_CERT":
       goToPage("/app/cert");
       break;
+      case 5:
+        goToPage("/domain-shield/");
+        break;
   }
 };
 const getHistoryFromLocal = () => {

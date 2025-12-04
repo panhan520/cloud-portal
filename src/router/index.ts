@@ -77,6 +77,14 @@ export const basicRoutes: IRouteRecordRaw[] = [
         path: "/app/console/:any(.*)?",
         microApp: MicroApp.CONSOLE,
       },
+      {
+        path: "/domain-shield/:any(.*)?",
+        microApp: MicroApp.DOMAIN,
+      },
+      {
+        path: "/app/domain/:any(.*)?",
+        microApp: MicroApp.DOMAIN,
+      },
     ],
   },
   {
