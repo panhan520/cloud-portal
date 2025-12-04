@@ -14,10 +14,9 @@
         </li>
       </ul>
       <div class="account-sider__footer" @click="toggleCollapsed">
-        <span class="account-sider__footer-icon">≡</span>
-        <span class="account-sider__footer-text">{{
-          collapsed ? "展开" : "收起"
-        }}</span>
+        <span class="account-sider__footer-icon"
+          ><el-icon><Expand v-if="collapsed" /><Fold v-else /></el-icon
+        ></span>
       </div>
     </aside>
     <section class="account-content">
@@ -29,7 +28,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { User } from "@element-plus/icons-vue";
+import { User, Expand, Fold } from "@element-plus/icons-vue";
 
 interface MenuItem {
   label: string;
@@ -96,7 +95,7 @@ const toggleCollapsed = () => {
 
   &.collapsed {
     .account-sider {
-      width: 72px;
+      width: 62px;
     }
     .account-menu__item {
       justify-content: center;
@@ -119,7 +118,7 @@ const toggleCollapsed = () => {
 
 .account-sider {
   width: 200px;
-  padding: 24px 0;
+  padding: 24px 0 10px;
   background: #fbfcff;
   box-shadow: inset -1px 0 0 #edf1f6;
   display: flex;
@@ -169,8 +168,7 @@ const toggleCollapsed = () => {
 }
 
 .account-sider__footer {
-  padding: 16px 24px 0;
-  border-top: 1px solid #edf1f6;
+  padding: 16px 20px 0;
   font-size: 13px;
   color: #4e5969;
   cursor: pointer;
@@ -184,7 +182,7 @@ const toggleCollapsed = () => {
 }
 
 .account-sider__footer-icon {
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .account-content {
