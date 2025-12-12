@@ -250,7 +250,7 @@ const handleOpenService = async (service: any) => {
       case "CLOUD_PRODUCT_CERT":
         icon = "fa-solid fa-file-shield";
         break;
-      case 5:
+      case 'CLOUD_PRODUCT_DNPS':
         icon = "fa-solid fa-shield-halved";
         break;
     }
@@ -269,7 +269,7 @@ const handleOpenService = async (service: any) => {
       case "CLOUD_PRODUCT_WAF":
         goToPage("/app/waf");
         break;
-      case 5:
+      case "CLOUD_PRODUCT_DNPS":
         goToPage("/domain-shield/");
         break;
     }
@@ -318,7 +318,7 @@ const goToProduct = (service: any) => {
     case "CLOUD_PRODUCT_CERT":
       icon = "fa-solid fa-file-shield";
       break;
-    case 5:
+    case "CLOUD_PRODUCT_DNPS":
       icon = "fa-solid fa-shield-halved";
       break;
   }
@@ -340,9 +340,9 @@ const goToProduct = (service: any) => {
     case "CLOUD_PRODUCT_CERT":
       goToPage("/app/cert");
       break;
-      case 5:
-        goToPage("/domain-shield/");
-        break;
+    case 'CLOUD_PRODUCT_DNPS':
+      goToPage("/domain-shield/");
+      break;
   }
 };
 const getHistoryFromLocal = () => {
