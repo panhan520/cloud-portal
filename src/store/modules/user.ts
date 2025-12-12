@@ -89,9 +89,19 @@ export const useUserStore = defineStore(
       userOrg.value.orgId = "";
       userOrg.value.tenantId = "";
       roles.value = [];
-      // 清空存储
-      localStorage.clear();
+      // 清空存储，只保留 recentlyProducts（最近访问产品的记录）
+      clearLocalStorageExcluding(["recentlyProducts"]);
       sessionStorage.clear();
+    };
+    // 清除 localStorage 时保留指定 key
+    const clearLocalStorageExcluding = (keysToKeep: string[] = []) => {
+      const keys = Object.keys(localStorage);
+      keys.forEach((key) => {
+        // 如果 key 不在保留列表中，则删除
+        if (!keysToKeep.includes(key)) {
+          localStorage.removeItem(key);
+        }
+      });
     };
     /** 重置app状态，重新登录 */
     const resetApp = async () => {
