@@ -91,7 +91,6 @@
           <template #default>
             <div class="user-wrap">
               <div class="avatar">{{ userInitial }}</div>
-              <i class="arrow"></i>
             </div>
           </template>
           <template #dropdown>
@@ -267,7 +266,7 @@ const handleService = async (service: any) => {
     case "CLOUD_PRODUCT_CERT":
       icon = "fa-solid fa-file-shield";
       break;
-    case 'CLOUD_PRODUCT_DNPS':
+    case "CLOUD_PRODUCT_DNPS":
       icon = "fa-solid fa-shield-halved";
       break;
   }
@@ -287,7 +286,7 @@ const handleService = async (service: any) => {
     case "CLOUD_PRODUCT_CERT":
       goToPage("/app/cert");
       break;
-    case 'CLOUD_PRODUCT_DNPS':
+    case "CLOUD_PRODUCT_DNPS":
       goToPage("/domain-shield/");
       break;
   }
@@ -494,14 +493,6 @@ const goToPage = (path: string) => {
         align-items: center;
         font-size: 16px;
         font-weight: 600;
-      }
-      .arrow {
-        width: 8px;
-        height: 8px;
-        border-left: 2px solid #999;
-        border-bottom: 2px solid #999;
-        transform: rotate(-45deg);
-        margin-left: 2px;
       }
     }
   }
