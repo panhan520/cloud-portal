@@ -2,9 +2,12 @@ import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsxPlugin from "@vitejs/plugin-vue-jsx";
 import path from "path";
+import { fileURLToPath } from "url";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, process.cwd());
@@ -34,18 +37,18 @@ export default defineConfig(async ({ mode }) => {
       // proxy: generateMicroAppProxy(getMicroAppConfigs(loadEnv(mode, process.cwd()))),
       proxy: {
         // 证书
-        "/apis": {
-          target: "https://www.dev.wafscloud.com",
-          changeOrigin: true,
+        '/apis': {
+          target: 'https://www.dev.wafscloud.com',
+          changeOrigin: true
         },
         // 控制台
         "/api/v1/iam": {
-          target: "https://gateway.observe.dev.eks.gainetics.io",
+          target: "https://www.dev.wafscloud.com",
           changeOrigin: true,
         },
         // 账户相关
         "/user-proxy": {
-          target: "https://gateway.observe.dev.eks.gainetics.io",
+          target: "https://www.dev.wafscloud.com",
           changeOrigin: true,
           rewrite: (path: string) => path.replace(/^\/user-proxy/, ""),
         },
