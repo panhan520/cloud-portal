@@ -80,6 +80,7 @@ const getReqByProxyModule = ({
         UserStore.clearInfo();
         const router = getRouter();
         router?.push("/login");
+        ElMessage.closeAll();
         ElMessage.error(resData.message);
         return Promise.reject(new Error(resData.message || "登录已过期"));
       }
@@ -92,6 +93,7 @@ const getReqByProxyModule = ({
 
         // 如果不是特殊情况，就提示失败
         if (!isSpecialCase) {
+          ElMessage.closeAll();
           ElMessage.error(resData.message || "请求失败");
           return Promise.reject(new Error(resData.message || "请求失败"));
         }
@@ -111,6 +113,7 @@ const getReqByProxyModule = ({
 
       const customMessage = (error?.response?.data as Record<string, any>)
         ?.message;
+      ElMessage.closeAll();
       ElMessage.error(customMessage);
       return Promise.reject(error);
     }
