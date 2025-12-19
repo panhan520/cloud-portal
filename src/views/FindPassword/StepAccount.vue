@@ -1,10 +1,6 @@
 <template>
   <div class="step-account">
-    <el-input
-      v-model="email"
-      placeholder="请输入需要找回密码的邮箱地址"
-      clearable
-    />
+    <el-input v-model="email" placeholder="请输入需要找回密码的邮箱地址" />
     <div class="btns">
       <el-button @click="$emit('prev')" disabled>上一步</el-button>
       <el-button type="primary" @click="nextStep" :loading="loading"

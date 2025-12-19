@@ -55,7 +55,6 @@
       <el-input
         v-model="searchText"
         placeholder="搜索产品或文档"
-        clearable
         class="search-input"
         @keyup.enter="onSearch"
       >

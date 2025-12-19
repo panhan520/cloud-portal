@@ -34,7 +34,6 @@
                   v-model="form.email"
                   placeholder="请输入邮箱"
                   @keyup.enter.native="handleSubmit"
-                  clearable
                 />
               </el-form-item>
               <el-form-item prop="passwordEmail">
@@ -43,7 +42,6 @@
                   placeholder="请输入密码"
                   :type="showPassword ? 'text' : 'password'"
                   @keyup.enter.native="handleSubmit"
-                  clearable
                 >
                   <template #suffix>
                     <el-button
@@ -66,7 +64,6 @@
                   placeholder="请输入用户名称"
                   autocomplete="username"
                   @keyup.enter.native="handleSubmit"
-                  clearable
                 />
               </el-form-item>
 
@@ -77,7 +74,6 @@
                   placeholder="请输入密码"
                   autocomplete="current-password"
                   @keyup.enter.native="handleSubmit"
-                  clearable
                 >
                   <template #suffix>
                     <el-button

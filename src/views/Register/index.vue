@@ -21,18 +21,13 @@
           class="login-form"
         >
           <el-form-item prop="username">
-            <el-input
-              v-model="form.username"
-              placeholder="请输入用户名称"
-              clearable
-            />
+            <el-input v-model="form.username" placeholder="请输入用户名称" />
           </el-form-item>
           <el-form-item prop="email">
             <el-input
               v-model="form.email"
               placeholder="请输入邮箱"
               @keyup.enter.native="handleSubmit"
-              clearable
             />
           </el-form-item>
           <el-form-item prop="password">
@@ -50,7 +45,6 @@
                   @input="checkPasswordStrength"
                   @focus="isPopoverVisible = true"
                   @blur="isPopoverVisible = false"
-                  clearable
                 >
                   <template #suffix>
                     <el-button
@@ -107,7 +101,6 @@
               placeholder="请再次输入密码"
               :type="showPasswordRe ? 'text' : 'password'"
               @keyup.enter.native="handleSubmit"
-              clearable
             >
               <template #suffix>
                 <el-button
@@ -123,11 +116,7 @@
           </el-form-item>
           <el-form-item prop="code">
             <div class="code-box">
-              <el-input
-                v-model="form.code"
-                placeholder="请输入邮箱验证码"
-                clearable
-              />
+              <el-input v-model="form.code" placeholder="请输入邮箱验证码" />
               <el-button
                 type="default"
                 :disabled="countdown > 0"
