@@ -192,6 +192,9 @@ const handlePrev = () => {
 :deep(.el-tabs__nav-wrap:after) {
   background-color: #ffffff;
 }
+:deep(.el-input__inner) {
+  height: 40px;
+}
 .find-container {
   width: 400px;
   margin: 100px auto;

@@ -406,6 +406,9 @@ function goTo(path: string) {
 :deep(.el-checkbox__input.is-checked + .el-checkbox__label) {
   color: #41464f;
 }
+:deep(.el-input__inner) {
+  height: 40px;
+}
 .register-wrap {
   display: flex;
   min-height: 100vh;

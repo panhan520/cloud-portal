@@ -249,6 +249,9 @@ function handleNext() {
 :deep(.el-tabs__nav-wrap:after) {
   background-color: #ffffff;
 }
+:deep(.el-input__inner) {
+  height: 40px;
+}
 .login-wrap {
   display: flex;
   min-height: 100vh;

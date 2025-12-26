@@ -63,6 +63,9 @@ function handlePrev() {
 :deep(.el-step__title.is-process) {
   color: #1664ff;
 }
+:deep(.el-input__inner) {
+  height: 40px;
+}
 .forgot-container {
   max-width: 500px;
   margin: 100px auto;
