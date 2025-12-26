@@ -43,8 +43,15 @@ export const getMicroAppConfigs = (env: Record<string, any>) => [
     name: MicroApp.DOMAIN,
     entry: env?.VITE_DOMAIN_URL,
     activeRule: (location: Location) => {
-      // 匹配 /domain-shield 或 /app/domain 开头的路径
-      return location.pathname.startsWith("/domain-shield") || location.pathname.startsWith("/app/domain");
+      // 只匹配 /app/domain-shield 或 /app/domain 开头的路径
+      // 注意：不再匹配 /domain-shield，避免与子应用真实路径冲突
+      const pathname = location.pathname;
+      // 明确排除 /domain-shield 路径，避免刷新页面时直接路由到子应用
+      if (pathname.startsWith("/domain-shield")) {
+        return false;
+      }
+      // 只匹配 /app/domain-shield 或 /app/domain 开头的路径
+      return pathname.startsWith("/app/domain-shield") || pathname.startsWith("/app/domain");
     },
     // 启用样式隔离
     sandbox: {

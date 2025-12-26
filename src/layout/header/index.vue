@@ -286,7 +286,7 @@ const handleService = async (service: any) => {
       goToPage("/app/cert");
       break;
     case "CLOUD_PRODUCT_DNPS":
-      goToPage("/domain-shield/");
+      goToPage("/app/domain-shield/");
       break;
   }
 };

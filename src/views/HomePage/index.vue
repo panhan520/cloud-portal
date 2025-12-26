@@ -270,7 +270,7 @@ const handleOpenService = async (service: any) => {
         goToPage("/app/waf");
         break;
       case "CLOUD_PRODUCT_DNPS":
-        goToPage("/domain-shield/");
+        goToPage("/app/domain-shield/");
         break;
     }
   } else if (rawService.isReady) {
@@ -341,7 +341,7 @@ const goToProduct = (service: any) => {
       goToPage("/app/cert");
       break;
     case 'CLOUD_PRODUCT_DNPS':
-      goToPage("/domain-shield/");
+      goToPage("/app/domain-shield/");
       break;
   }
 };
