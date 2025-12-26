@@ -37,18 +37,18 @@ export default defineConfig(async ({ mode }) => {
       // proxy: generateMicroAppProxy(getMicroAppConfigs(loadEnv(mode, process.cwd()))),
       proxy: {
         // 证书
-        '/apis': {
-          target: 'https://www.dev.wafscloud.com',
-          changeOrigin: true
+        "/apis": {
+          target: "https://www.wafscloud.com",
+          changeOrigin: true,
         },
         // 控制台
         "/api/v1/iam": {
-          target: "https://www.dev.wafscloud.com",
+          target: "https://www.wafscloud.com",
           changeOrigin: true,
         },
         // 账户相关
         "/user-proxy": {
-          target: "https://www.dev.wafscloud.com",
+          target: "https://www.wafscloud.com",
           changeOrigin: true,
           rewrite: (path: string) => path.replace(/^\/user-proxy/, ""),
         },
